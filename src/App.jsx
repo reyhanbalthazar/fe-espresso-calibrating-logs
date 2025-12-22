@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import BeanListPage from './pages/beans/BeanListPage';
 import GrinderListPage from './pages/grinders/GrinderListPage';
+import SessionListPage from './pages/sessions/SessionListPage';
 
 // Placeholder for the main dashboard/home page
 const HomePage = () => {
@@ -44,6 +45,11 @@ function App() {
           <Route path="/grinders" element={
             <ProtectedRoute>
               <GrinderListPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/sessions" element={
+            <ProtectedRoute>
+              <SessionListPage />
             </ProtectedRoute>
           } />
           <Route path="/register" element={<RegisterPage />} />

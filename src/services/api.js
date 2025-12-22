@@ -61,4 +61,22 @@ export const grinderAPI = {
   deleteGrinder: (id) => api.delete(`/grinders/${id}`),
 };
 
+// Session endpoints
+export const sessionAPI = {
+  getAllSessions: () => api.get('/calibration-sessions'),
+  getSessionById: (id) => api.get(`/calibration-sessions/${id}`),
+  createSession: (sessionData) => api.post('/calibration-sessions', sessionData),
+  updateSession: (id, sessionData) => api.put(`/calibration-sessions/${id}`, sessionData),
+  deleteSession: (id) => api.delete(`/calibration-sessions/${id}`),
+};
+
+// Shot endpoints
+export const shotAPI = {
+  getAllShots: (sessionId) => api.get(`/calibration-sessions/${sessionId}/shots`),
+  getShotById: (sessionId, shotId) => api.get(`/calibration-sessions/${sessionId}/shots/${shotId}`),
+  createShot: (sessionId, shotData) => api.post(`/calibration-sessions/${sessionId}/shots`, shotData),
+  updateShot: (sessionId, shotId, shotData) => api.put(`/calibration-sessions/${sessionId}/shots/${shotId}`, shotData),
+  deleteShot: (sessionId, shotId) => api.delete(`/calibration-sessions/${sessionId}/shots/${shotId}`),
+};
+
 export default api;
