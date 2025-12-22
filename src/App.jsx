@@ -6,6 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import BeanListPage from './pages/beans/BeanListPage';
+import GrinderListPage from './pages/grinders/GrinderListPage';
 
 // Placeholder for the main dashboard/home page
 const HomePage = () => {
@@ -38,6 +39,11 @@ function App() {
           <Route path="/beans" element={
             <ProtectedRoute>
               <BeanListPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/grinders" element={
+            <ProtectedRoute>
+              <GrinderListPage />
             </ProtectedRoute>
           } />
           <Route path="/register" element={<RegisterPage />} />

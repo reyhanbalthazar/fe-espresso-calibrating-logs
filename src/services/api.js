@@ -52,4 +52,13 @@ export const beanAPI = {
   deleteBean: (id) => api.delete(`/beans/${id}`),
 };
 
+// Grinder endpoints
+export const grinderAPI = {
+  getAllGrinders: () => api.get('/grinders'),
+  getGrinderById: (id) => api.get(`/grinders/${id}`),
+  createGrinder: (grinderData) => api.post('/grinders', grinderData),
+  updateGrinder: (id, grinderData) => api.put(`/grinders/${id}`, grinderData),
+  deleteGrinder: (id) => api.delete(`/grinders/${id}`),
+};
+
 export default api;

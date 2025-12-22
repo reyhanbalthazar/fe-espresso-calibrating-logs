@@ -32,6 +32,12 @@ const Header = ({ title = 'Espresso Calibrator' }) => {
             >
               Beans
             </Link>
+            <Link
+              to="/grinders"
+              className={`${isActive('/grinders') ? 'text-amber-800 font-medium' : 'text-gray-600 hover:text-amber-800'} transition-colors`}
+            >
+              Grinders
+            </Link>
           </nav>
           <span className="text-gray-700">Welcome, {user.name}!</span>
           <button
