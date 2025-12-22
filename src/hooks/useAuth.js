@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 
 // Custom hook for authentication
-export const useAuthHook = () => {
+export const useAuth = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -43,4 +43,13 @@ export const authAPI = {
   getCurrentUser: () => api.get('/user'),
 };
 
+// Bean endpoints
+export const beanAPI = {
+  getAllBeans: () => api.get('/beans'),
+  getBeanById: (id) => api.get(`/beans/${id}`),
+  createBean: (beanData) => api.post('/beans', beanData),
+  updateBean: (id, beanData) => api.put(`/beans/${id}`, beanData),
+  deleteBean: (id) => api.delete(`/beans/${id}`),
+};
+
 export default api;
