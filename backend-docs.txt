@@ -1,0 +1,479 @@
+# Espresso Calibration API Backend Documentation
+
+## Table of Contents
+1. [API Overview](#api-overview)
+2. [Authentication](#authentication)
+3. [User Management](#user-management) 
+4. [Beans Management](#beans-management)
+5. [Grinder Management](#grinder-management)
+6. [Calibration Sessions](#calibration-sessions)
+7. [Shots Management](#shots-management)
+8. [Error Handling](#error-handling)
+9. [Response Formats](#response-formats)
+10. [API Best Practices](#api-best-practices)
+
+## API Overview
+
+### Base URL
+- Development: `http://localhost:8000/api`
+- Production: `[Your Production Domain]/api`
+
+### Content Type
+All requests and responses use `application/json` content type.
+
+### Authentication
+The API uses Laravel Sanctum for token-based authentication.
+
+---
+
+## Authentication
+
+### Register a New User
+- **Endpoint**: `POST /api/register`
+- **Description**: Creates a new user account
+- **Request Body**:
+```json
+{
+  "name": "string (required, max:100)",
+  "email": "string (required, email, max:150, unique)",
+  "password": "string (required, min:8, confirmed)"
+}
+```
+
+- **Success Response (201)**:
+```json
+{
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "created_at": "2023-01-01T00:00:00.000000Z",
+    "updated_at": "2023-01-01T00:00:00.000000Z"
+  },
+  "token": "personal_access_token_string",
+  "message": "Registration successful"
+}
+```
+
+- **Error Response (422)**:
+```json
+{
+  "errors": {
+    "field_name": ["error_message"]
+  }
+}
+```
+
+### Login
+- **Endpoint**: `POST /api/login`
+- **Description**: Authenticates user and returns token
+- **Request Body**:
+```json
+{
+  "email": "string (required, email)",
+  "password": "string (required)"
+}
+```
+
+- **Success Response (200)**:
+```json
+{
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "created_at": "2023-01-01T00:00:00.000000Z",
+    "updated_at": "2023-01-01T00:00:00.000000Z"
+  },
+  "token": "personal_access_token_string",
+  "message": "Login successful"
+}
+```
+
+- **Error Response (422)**:
+```json
+{
+  "errors": {
+    "email": ["The provided credentials are incorrect."]
+  }
+}
+```
+
+### Logout
+- **Endpoint**: `POST /api/logout`
+- **Description**: Revokes all user tokens
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+{
+  "message": "Successfully logged out"
+}
+```
+
+### Get Current User
+- **Endpoint**: `GET /api/user`
+- **Description**: Returns authenticated user information
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "email_verified_at": null,
+  "created_at": "2023-01-01T00:00:00.000000Z",
+  "updated_at": "2023-01-01T00:00:00.000000Z"
+}
+```
+
+---
+
+## Beans Management
+
+### Get All Beans
+- **Endpoint**: `GET /api/beans`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+[
+  {
+    "id": 1,
+    "name": "Ethiopian Yirgacheffe",
+    "roaster": "Example Roaster",
+    "roast_level": "light",
+    "origin": "Ethiopia",
+    "processing_method": "washed",
+    "variety": "Heirloom",
+    "user_id": 1,
+    "created_at": "2023-01-01T00:00:00.000000Z",
+    "updated_at": "2023-01-01T00:00:00.000000Z"
+  }
+]
+```
+
+### Create New Bean
+- **Endpoint**: `POST /api/beans`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**:
+```json
+{
+  "name": "string (required, max:255)",
+  "roaster": "string (required, max:255)",
+  "roast_level": "string (required, light|medium|dark|custom)",
+  "origin": "string (required, max:255)",
+  "processing_method": "string (required, max:100)",
+  "variety": "string (optional, max:255)"
+}
+```
+
+- **Success Response (201)**:
+```json
+{
+  "id": 1,
+  "name": "Ethiopian Yirgacheffe",
+  "roaster": "Example Roaster",
+  "roast_level": "light",
+  "origin": "Ethiopia",
+  "processing_method": "washed",
+  "variety": "Heirloom",
+  "user_id": 1,
+  "created_at": "2023-01-01T00:00:00.000000Z",
+  "updated_at": "2023-01-01T00:00:00.000000Z"
+}
+```
+
+### Get Specific Bean
+- **Endpoint**: `GET /api/beans/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+
+### Update Bean
+- **Endpoint**: `PUT /api/beans/{id}` or `PATCH /api/beans/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**: Same as create but all fields are optional
+
+### Delete Bean
+- **Endpoint**: `DELETE /api/beans/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+{
+  "message": "Bean deleted successfully"
+}
+```
+
+---
+
+## Grinder Management
+
+### Get All Grinders
+- **Endpoint**: `GET /api/grinders`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+[
+  {
+    "id": 1,
+    "name": "Mazzer Mini",
+    "brand": "Mazzer",
+    "model": "Mini",
+    "type": "burr",
+    "user_id": 1,
+    "created_at": "2023-01-01T00:00:00.000000Z",
+    "updated_at": "2023-01-01T00:00:00.000000Z"
+  }
+]
+```
+
+### Create New Grinder
+- **Endpoint**: `POST /api/grinders`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**:
+```json
+{
+  "name": "string (required, max:255)",
+  "brand": "string (required, max:255)",
+  "model": "string (required, max:255)",
+  "type": "string (required, blade|burr|hand)"
+}
+```
+
+### Get Specific Grinder
+- **Endpoint**: `GET /api/grinders/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+
+### Update Grinder
+- **Endpoint**: `PUT /api/grinders/{id}` or `PATCH /api/grinders/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**: Same as create but all fields are optional
+
+### Delete Grinder
+- **Endpoint**: `DELETE /api/grinders/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+{
+  "message": "Grinder deleted successfully"
+}
+```
+
+---
+
+## Calibration Sessions
+
+### Get All Calibration Sessions
+- **Endpoint**: `GET /api/calibration-sessions`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+
+### Create New Calibration Session
+- **Endpoint**: `POST /api/calibration-sessions`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**:
+```json
+{
+  "bean_id": "int (required)",
+  "grinder_id": "int (required)",
+  "title": "string (required, max:255)",
+  "notes": "string (optional)",
+  "target_grind": "string (optional, max:50)",
+  "target_dose": "float (optional)",
+  "target_yield": "float (optional)",
+  "target_time": "int (optional)"
+}
+```
+
+### Get Specific Calibration Session
+- **Endpoint**: `GET /api/calibration-sessions/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+
+### Update Calibration Session
+- **Endpoint**: `PUT /api/calibration-sessions/{id}` or `PATCH /api/calibration-sessions/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**: Fields from create endpoint (all optional)
+
+### Delete Calibration Session
+- **Endpoint**: `DELETE /api/calibration-sessions/{id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+{
+  "message": "Calibration Session deleted successfully"
+}
+```
+
+---
+
+## Shots Management
+
+### Get Shots for Session
+- **Endpoint**: `GET /api/calibration-sessions/{session_id}/shots`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+
+### Get Specific Shot
+- **Endpoint**: `GET /api/calibration-sessions/{session_id}/shots/{shot_id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+
+### Create New Shot
+- **Endpoint**: `POST /api/calibration-sessions/{session_id}/shots`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**:
+```json
+{
+  "grind_setting": "string (required, max:50)",
+  "dose": "float (required, min:0, max:999.99)",
+  "yield": "float (required, min:0, max:999.99)",
+  "time_seconds": "int (required, min:1, max:999)",
+  "taste_notes": "string (optional)",
+  "action_taken": "string (optional)"
+}
+```
+
+### Update Shot
+- **Endpoint**: `PUT /api/calibration-sessions/{session_id}/shots/{shot_id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Request Body**: Same as create but fields are optional
+
+### Delete Shot
+- **Endpoint**: `DELETE /api/calibration-sessions/{session_id}/shots/{shot_id}`
+- **Headers**: 
+  - `Authorization: Bearer {token}` (required)
+- **Success Response (200)**:
+```json
+{
+  "message": "Shot deleted successfully"
+}
+```
+
+---
+
+## Error Handling
+
+### Common Error Status Codes:
+- `401 Unauthorized`: Authentication token missing or invalid
+- `403 Forbidden`: User does not have permission to access the resource
+- `404 Not Found`: Requested resource does not exist
+- `422 Unprocessable Entity`: Validation errors in request data
+- `500 Internal Server Error`: Server-side errors
+
+### Unauthorized Response (401):
+```json
+{
+  "message": "Unauthenticated.",
+  "error": "Token required or invalid"
+}
+```
+
+### Validation Error Response (422):
+```json
+{
+  "errors": {
+    "field_name": ["error_message"]
+  }
+}
+```
+
+### Forbidden Response (403):
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+---
+
+## Response Formats
+
+### Success Responses:
+Most successful operations return a 200 or 201 status code with the created/updated resource or a success message.
+
+### Data Response Format:
+```json
+{
+  "id": 1,
+  "field_name": "value",
+  "created_at": "datetime",
+  "updated_at": "datetime"
+}
+```
+
+### Message Response Format:
+```json
+{
+  "message": "Success message"
+}
+```
+
+---
+
+## API Best Practices for Frontend Development
+
+### 1. Token Management
+- Store the authentication token securely (e.g., in memory or secure localStorage)
+- Include the token in the Authorization header for all protected API calls: `Authorization: Bearer {token}`
+- Handle 401 responses by redirecting to login
+
+### 2. Error Handling
+- Display validation errors to users in a user-friendly format
+- Show appropriate error messages for 401, 403, and 404 responses
+- Implement proper loading states during API calls
+
+### 3. Request/Response Patterns
+- Always send content-type header as `application/json`
+- Handle both success and error responses appropriately
+- Implement optimistic updates where appropriate for better UX
+
+### 4. Security Considerations
+- Never expose tokens in URLs
+- Ensure all sensitive operations require authentication
+- Sanitize and validate user input on the frontend as well
+
+### 5. API Rate Limiting
+- Be aware that the API implements rate limiting (default: 60 requests per minute)
+- Implement appropriate retry logic when rate limits are reached
+
+### 6. Data Validation
+- Frontend validation should match backend validation rules
+- Always validate data before sending to API
+- Handle field constraints like max length and value ranges
+
+---
+
+## Additional Notes
+
+### Espresso Calibration Workflow
+1. User registers/logs in
+2. User creates coffee beans (optional)
+3. User creates grinder (optional) 
+4. User creates a calibration session with selected bean and grinder
+5. User adds multiple shots to the session with different parameters
+6. User analyzes results to find optimal settings
+
+### Data Relationships
+- Users own beans, grinders, and calibration sessions
+- Calibration sessions contain multiple shots
+- Each shot belongs to exactly one calibration session
+
+### Performance Considerations
+- The API is designed to handle multiple concurrent users
+- Endpoints are optimized for mobile and web applications
+- Consider caching user-specific data for better performance

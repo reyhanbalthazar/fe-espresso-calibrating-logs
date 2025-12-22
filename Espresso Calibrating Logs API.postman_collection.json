@@ -1,0 +1,2775 @@
+{
+	"info": {
+		"_postman_id": "ff2a2528-cc31-44c2-a67b-b270d57b9cd6",
+		"name": "Espresso Calibrating Logs API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29056007",
+		"_collection_link": "https://dmmx-meeting-room.postman.co/workspace/DMMX-Meeting-Room-Workspace~2df8b157-655a-420a-8d65-31b5c8a1e1b4/collection/29056007-ff2a2528-cc31-44c2-a67b-b270d57b9cd6?action=share&source=collection_link&creator=29056007"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Barista\",\r\n    \"email\": \"barista6@test.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Barista\",\r\n    \"email\": \"barista6@test.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 09:54:25 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"name\": \"Test Barista\",\n        \"email\": \"barista6@test.com\",\n        \"updated_at\": \"2025-12-17T09:54:25.000000Z\",\n        \"created_at\": \"2025-12-17T09:54:25.000000Z\",\n        \"id\": 7\n    },\n    \"token\": \"4|f5G6OCwCpzhspNWyFXTSCEcPM8bDz2U5P7FI5ug462bf8668\",\n    \"message\": \"Registration successful\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"barista3@test.com\",\r\n    \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"barista3@test.com\",\r\n    \"password\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 09:54:42 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"id\": 4,\n        \"name\": \"Test Barista\",\n        \"email\": \"barista3@test.com\",\n        \"email_verified_at\": null,\n        \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n        \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n    },\n    \"token\": \"5|MQtafIVN7QmZ384YQt8e9RKVLGnfGqcrIBtmRD1wa94db2a8\",\n    \"message\": \"Login successful\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/logout",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 09:55:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully logged out\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Current User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Barista\",\r\n    \"email\": \"barista4@test.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Barista\",\r\n    \"email\": \"barista4@test.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 09:55:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 4,\n    \"name\": \"Test Barista\",\n    \"email\": \"barista3@test.com\",\n    \"email_verified_at\": null,\n    \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n    \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Beans",
+			"item": [
+				{
+					"name": "List All Beans",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/beans",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"beans"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/beans",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"beans"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 09:58:18 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Ethiopia Guji\",\n        \"origin\": \"Ethiopia\",\n        \"roastery\": \"XYZ Coffee\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2025-12-12T00:00:00.000000Z\",\n        \"roast_age\": 5,\n        \"notes\": \"Floral, tea-like\",\n        \"sessions_count\": 1,\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Colombia Huila\",\n        \"origin\": \"Colombia\",\n        \"roastery\": \"ABC Roasters\",\n        \"roast_level\": \"light\",\n        \"roast_date\": \"2025-12-09T00:00:00.000000Z\",\n        \"roast_age\": 8,\n        \"notes\": \"Citrus, berry notes\",\n        \"sessions_count\": 0,\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create New Beans",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Kenya AA\",\r\n    \"origin\": \"Kenya\",\r\n    \"roastery\": \"African Roast Co.\",\r\n    \"roast_level\": \"medium\",\r\n    \"roast_date\": \"2024-01-15\",\r\n    \"notes\": \"Bright acidity, berry notes, winey\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/beans",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"beans"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Kenya AA\",\r\n    \"origin\": \"Kenya\",\r\n    \"roastery\": \"African Roast Co.\",\r\n    \"roast_level\": \"medium\",\r\n    \"roast_date\": \"2024-01-15\",\r\n    \"notes\": \"Bright acidity, berry notes, winey\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/beans",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"beans"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:44:47 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"Kenya AA\",\n    \"origin\": \"Kenya\",\n    \"roastery\": \"African Roast Co.\",\n    \"roast_level\": \"medium\",\n    \"roast_date\": \"2024-01-15T00:00:00.000000Z\",\n    \"notes\": \"Bright acidity, berry notes, winey\",\n    \"updated_at\": \"2025-12-17T10:44:47.000000Z\",\n    \"created_at\": \"2025-12-17T10:44:47.000000Z\",\n    \"id\": 4\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Single Bean",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/beans/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"beans",
+								"4"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/beans/4",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"beans",
+										"4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:45:21 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "56"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"bean\": {\n        \"id\": 4,\n        \"name\": \"Kenya AA\",\n        \"origin\": \"Kenya\",\n        \"roastery\": \"African Roast Co.\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2024-01-15T00:00:00.000000Z\",\n        \"notes\": \"Bright acidity, berry notes, winey\",\n        \"created_at\": \"2025-12-17T10:44:47.000000Z\",\n        \"updated_at\": \"2025-12-17T10:44:47.000000Z\",\n        \"calibration_sessions\": []\n    },\n    \"recent_sessions\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Bean",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"notes\": \"Updated: Very bright, complex acidity, blackberry notes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/beans/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"beans",
+								"4"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"notes\": \"Updated: Very bright, complex acidity, blackberry notes\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/beans/4",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"beans",
+										"4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:45:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "55"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 4,\n    \"name\": \"Kenya AA\",\n    \"origin\": \"Kenya\",\n    \"roastery\": \"African Roast Co.\",\n    \"roast_level\": \"medium\",\n    \"roast_date\": \"2024-01-15T00:00:00.000000Z\",\n    \"notes\": \"Updated: Very bright, complex acidity, blackberry notes\",\n    \"created_at\": \"2025-12-17T10:44:47.000000Z\",\n    \"updated_at\": \"2025-12-17T10:45:36.000000Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Bean",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/beans/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"beans",
+								"4"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/beans/4",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"beans",
+										"4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:45:53 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Bean deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Grinders",
+			"item": [
+				{
+					"name": "List All Grinders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/grinders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"grinders"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/grinders",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"grinders"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:46:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 3,\n        \"name\": \"Niche Zero\",\n        \"model\": \"Niche Zero\",\n        \"notes\": \"Single dose grinder, low retention\",\n        \"created_at\": \"2025-12-17T08:22:44.000000Z\",\n        \"updated_at\": \"2025-12-17T08:22:44.000000Z\",\n        \"calibration_sessions_count\": 0\n    },\n    {\n        \"id\": 1,\n        \"name\": \"EK43\",\n        \"model\": \"Mahlkönig EK43\",\n        \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"updated_at\": \"2025-12-17T08:27:10.000000Z\",\n        \"calibration_sessions_count\": 1\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Mythos One\",\n        \"model\": \"Nuova Simonelli Mythos One\",\n        \"notes\": \"Training bar\",\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"updated_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"calibration_sessions_count\": 0\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create New Grinder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Niche Zero\",\r\n    \"model\": \"Niche Zero\",\r\n    \"notes\": \"Single dose grinder, low retention\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/grinders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"grinders"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Niche Zero\",\r\n    \"model\": \"Niche Zero\",\r\n    \"notes\": \"Single dose grinder, low retention\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/grinders",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"grinders"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:47:08 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"Niche Zero\",\n    \"model\": \"Niche Zero\",\n    \"notes\": \"Single dose grinder, low retention\",\n    \"updated_at\": \"2025-12-17T10:47:08.000000Z\",\n    \"created_at\": \"2025-12-17T10:47:08.000000Z\",\n    \"id\": 4\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Single Grinder",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/grinders/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"grinders",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/grinders/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"grinders",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:47:29 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"EK43\",\n    \"model\": \"Mahlkönig EK43\",\n    \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n    \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n    \"updated_at\": \"2025-12-17T08:27:10.000000Z\",\n    \"calibration_sessions\": [\n        {\n            \"id\": 2,\n            \"bean_id\": 1,\n            \"grinder_id\": 1,\n            \"user_id\": 4,\n            \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n            \"notes\": \"Morning calibration for Kenya AA\",\n            \"created_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"updated_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"bean\": {\n                \"id\": 1,\n                \"name\": \"Ethiopia Guji\",\n                \"origin\": \"Ethiopia\",\n                \"roastery\": \"XYZ Coffee\",\n                \"roast_level\": \"medium\",\n                \"roast_date\": \"2025-12-12T00:00:00.000000Z\",\n                \"notes\": \"Floral, tea-like\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n            },\n            \"user\": {\n                \"id\": 4,\n                \"name\": \"Test Barista\",\n                \"email\": \"barista3@test.com\",\n                \"email_verified_at\": null,\n                \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n                \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Grinder",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"notes\": \"Updated: Excellent for single dosing, minimal static\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/grinders/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"grinders",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"notes\": \"Updated: Excellent for single dosing, minimal static\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/grinders/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"grinders",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:47:57 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"EK43\",\n    \"model\": \"Mahlkönig EK43\",\n    \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n    \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n    \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Grinder",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"notes\": \"Updated: Excellent for single dosing, minimal static\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/grinders/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"grinders",
+								"4"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"notes\": \"Updated: Excellent for single dosing, minimal static\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/grinders/4",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"grinders",
+										"4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:48:31 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Grinder deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Calibration Sessions",
+			"item": [
+				{
+					"name": "List All Sessions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions?bean_id=1&grinder_id=1&page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions"
+							],
+							"query": [
+								{
+									"key": "bean_id",
+									"value": "1"
+								},
+								{
+									"key": "grinder_id",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions?bean_id=1&grinder_id=1&page=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions"
+									],
+									"query": [
+										{
+											"key": "bean_id",
+											"value": "1"
+										},
+										{
+											"key": "grinder_id",
+											"value": "1"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:51:21 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"bean_id\": 1,\n            \"grinder_id\": 1,\n            \"user_id\": 4,\n            \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n            \"notes\": \"Morning calibration for Kenya AA\",\n            \"created_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"updated_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"bean\": {\n                \"id\": 1,\n                \"name\": \"Ethiopia Guji\",\n                \"origin\": \"Ethiopia\",\n                \"roastery\": \"XYZ Coffee\",\n                \"roast_level\": \"medium\",\n                \"roast_date\": \"2025-12-12T00:00:00.000000Z\",\n                \"notes\": \"Floral, tea-like\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n            },\n            \"grinder\": {\n                \"id\": 1,\n                \"name\": \"EK43\",\n                \"model\": \"Mahlkönig EK43\",\n                \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n            },\n            \"user\": {\n                \"id\": 4,\n                \"name\": \"Test Barista\",\n                \"email\": \"barista3@test.com\",\n                \"email_verified_at\": null,\n                \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n                \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n            },\n            \"shots\": [\n                {\n                    \"id\": 2,\n                    \"calibration_session_id\": 2,\n                    \"shot_number\": 1,\n                    \"grind_setting\": \"15\",\n                    \"dose\": \"18.00\",\n                    \"yield\": \"36.00\",\n                    \"time_seconds\": 28,\n                    \"taste_notes\": \"Sour, under-extracted\",\n                    \"action_taken\": \"Grind finer\",\n                    \"created_at\": \"2025-12-17T10:50:18.000000Z\",\n                    \"updated_at\": \"2025-12-17T10:50:18.000000Z\"\n                },\n                {\n                    \"id\": 3,\n                    \"calibration_session_id\": 2,\n                    \"shot_number\": 2,\n                    \"grind_setting\": \"15\",\n                    \"dose\": \"18.00\",\n                    \"yield\": \"36.00\",\n                    \"time_seconds\": 32,\n                    \"taste_notes\": \"Sour, under-extracted\",\n                    \"action_taken\": \"Grind finer\",\n                    \"created_at\": \"2025-12-17T10:50:40.000000Z\",\n                    \"updated_at\": \"2025-12-17T10:50:40.000000Z\"\n                }\n            ]\n        }\n    ],\n    \"first_page_url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": null,\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": null,\n    \"path\": \"http://localhost:8000/api/calibration-sessions\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 1,\n    \"total\": 1\n}"
+						},
+						{
+							"name": "Success List All Sessions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions?page=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:55:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 3,\n            \"bean_id\": 2,\n            \"grinder_id\": 1,\n            \"user_id\": 4,\n            \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n            \"notes\": \"Updated: Successful calibration, locked in recipe\",\n            \"created_at\": \"2025-12-17T10:51:55.000000Z\",\n            \"updated_at\": \"2025-12-17T10:53:19.000000Z\",\n            \"bean\": {\n                \"id\": 2,\n                \"name\": \"Colombia Huila\",\n                \"origin\": \"Colombia\",\n                \"roastery\": \"ABC Roasters\",\n                \"roast_level\": \"light\",\n                \"roast_date\": \"2025-12-09T00:00:00.000000Z\",\n                \"notes\": \"Citrus, berry notes\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n            },\n            \"grinder\": {\n                \"id\": 1,\n                \"name\": \"EK43\",\n                \"model\": \"Mahlkönig EK43\",\n                \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n            },\n            \"user\": {\n                \"id\": 4,\n                \"name\": \"Test Barista\",\n                \"email\": \"barista3@test.com\",\n                \"email_verified_at\": null,\n                \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n                \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n            },\n            \"shots\": []\n        }\n    ],\n    \"first_page_url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": null,\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": null,\n    \"path\": \"http://localhost:8000/api/calibration-sessions\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 1,\n    \"total\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Sessions for Specific Bean",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/beans/1/sessions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"beans",
+								"1",
+								"sessions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/beans/1/sessions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"beans",
+										"1",
+										"sessions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:50:46 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"bean_id\": 1,\n            \"grinder_id\": 1,\n            \"user_id\": 4,\n            \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n            \"notes\": \"Morning calibration for Kenya AA\",\n            \"created_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"updated_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"bean\": {\n                \"id\": 1,\n                \"name\": \"Ethiopia Guji\",\n                \"origin\": \"Ethiopia\",\n                \"roastery\": \"XYZ Coffee\",\n                \"roast_level\": \"medium\",\n                \"roast_date\": \"2025-12-12T00:00:00.000000Z\",\n                \"notes\": \"Floral, tea-like\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n            },\n            \"grinder\": {\n                \"id\": 1,\n                \"name\": \"EK43\",\n                \"model\": \"Mahlkönig EK43\",\n                \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n            },\n            \"user\": {\n                \"id\": 4,\n                \"name\": \"Test Barista\",\n                \"email\": \"barista3@test.com\",\n                \"email_verified_at\": null,\n                \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n                \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n            },\n            \"shots\": [\n                {\n                    \"id\": 2,\n                    \"calibration_session_id\": 2,\n                    \"shot_number\": 1,\n                    \"grind_setting\": \"15\",\n                    \"dose\": \"18.00\",\n                    \"yield\": \"36.00\",\n                    \"time_seconds\": 28,\n                    \"taste_notes\": \"Sour, under-extracted\",\n                    \"action_taken\": \"Grind finer\",\n                    \"created_at\": \"2025-12-17T10:50:18.000000Z\",\n                    \"updated_at\": \"2025-12-17T10:50:18.000000Z\"\n                },\n                {\n                    \"id\": 3,\n                    \"calibration_session_id\": 2,\n                    \"shot_number\": 2,\n                    \"grind_setting\": \"15\",\n                    \"dose\": \"18.00\",\n                    \"yield\": \"36.00\",\n                    \"time_seconds\": 32,\n                    \"taste_notes\": \"Sour, under-extracted\",\n                    \"action_taken\": \"Grind finer\",\n                    \"created_at\": \"2025-12-17T10:50:40.000000Z\",\n                    \"updated_at\": \"2025-12-17T10:50:40.000000Z\"\n                }\n            ]\n        }\n    ],\n    \"first_page_url\": \"http://localhost:8000/api/beans/1/sessions?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://localhost:8000/api/beans/1/sessions?page=1\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost:8000/api/beans/1/sessions?page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": null,\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": null,\n    \"path\": \"http://localhost:8000/api/beans/1/sessions\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 1,\n    \"total\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Create New Session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bean_id\": \"2\",\r\n    \"grinder_id\": \"1\",\r\n    \"session_date\": \"2024-01-20\",\r\n    \"notes\": \"Morning calibration for Ethiopia Guji\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"bean_id\": \"2\",\r\n    \"grinder_id\": \"1\",\r\n    \"session_date\": \"2024-01-20\",\r\n    \"notes\": \"Morning calibration for Ethiopia Guji\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:51:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"bean_id\": \"2\",\n    \"grinder_id\": \"1\",\n    \"user_id\": 4,\n    \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n    \"notes\": \"Morning calibration for Ethiopia Guji\",\n    \"updated_at\": \"2025-12-17T10:51:55.000000Z\",\n    \"created_at\": \"2025-12-17T10:51:55.000000Z\",\n    \"id\": 3,\n    \"bean\": {\n        \"id\": 2,\n        \"name\": \"Colombia Huila\",\n        \"origin\": \"Colombia\",\n        \"roastery\": \"ABC Roasters\",\n        \"roast_level\": \"light\",\n        \"roast_date\": \"2025-12-09T00:00:00.000000Z\",\n        \"notes\": \"Citrus, berry notes\",\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n    },\n    \"grinder\": {\n        \"id\": 1,\n        \"name\": \"EK43\",\n        \"model\": \"Mahlkönig EK43\",\n        \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n    },\n    \"user\": {\n        \"id\": 4,\n        \"name\": \"Test Barista\",\n        \"email\": \"barista3@test.com\",\n        \"email_verified_at\": null,\n        \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n        \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Single Session with Shots",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:52:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"bean_id\": 1,\n            \"grinder_id\": 1,\n            \"user_id\": 4,\n            \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n            \"notes\": \"Morning calibration for Kenya AA\",\n            \"created_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"updated_at\": \"2025-12-17T08:35:22.000000Z\",\n            \"bean\": {\n                \"id\": 1,\n                \"name\": \"Ethiopia Guji\",\n                \"origin\": \"Ethiopia\",\n                \"roastery\": \"XYZ Coffee\",\n                \"roast_level\": \"medium\",\n                \"roast_date\": \"2025-12-12T00:00:00.000000Z\",\n                \"notes\": \"Floral, tea-like\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n            },\n            \"grinder\": {\n                \"id\": 1,\n                \"name\": \"EK43\",\n                \"model\": \"Mahlkönig EK43\",\n                \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n            },\n            \"user\": {\n                \"id\": 4,\n                \"name\": \"Test Barista\",\n                \"email\": \"barista3@test.com\",\n                \"email_verified_at\": null,\n                \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n                \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n            },\n            \"shots\": [\n                {\n                    \"id\": 2,\n                    \"calibration_session_id\": 2,\n                    \"shot_number\": 1,\n                    \"grind_setting\": \"15\",\n                    \"dose\": \"18.00\",\n                    \"yield\": \"36.00\",\n                    \"time_seconds\": 28,\n                    \"taste_notes\": \"Sour, under-extracted\",\n                    \"action_taken\": \"Grind finer\",\n                    \"created_at\": \"2025-12-17T10:50:18.000000Z\",\n                    \"updated_at\": \"2025-12-17T10:50:18.000000Z\"\n                },\n                {\n                    \"id\": 3,\n                    \"calibration_session_id\": 2,\n                    \"shot_number\": 2,\n                    \"grind_setting\": \"15\",\n                    \"dose\": \"18.00\",\n                    \"yield\": \"36.00\",\n                    \"time_seconds\": 32,\n                    \"taste_notes\": \"Sour, under-extracted\",\n                    \"action_taken\": \"Grind finer\",\n                    \"created_at\": \"2025-12-17T10:50:40.000000Z\",\n                    \"updated_at\": \"2025-12-17T10:50:40.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"bean_id\": 2,\n            \"grinder_id\": 1,\n            \"user_id\": 4,\n            \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n            \"notes\": \"Morning calibration for Columbia Huila\",\n            \"created_at\": \"2025-12-17T10:51:55.000000Z\",\n            \"updated_at\": \"2025-12-17T10:51:55.000000Z\",\n            \"bean\": {\n                \"id\": 2,\n                \"name\": \"Colombia Huila\",\n                \"origin\": \"Colombia\",\n                \"roastery\": \"ABC Roasters\",\n                \"roast_level\": \"light\",\n                \"roast_date\": \"2025-12-09T00:00:00.000000Z\",\n                \"notes\": \"Citrus, berry notes\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n            },\n            \"grinder\": {\n                \"id\": 1,\n                \"name\": \"EK43\",\n                \"model\": \"Mahlkönig EK43\",\n                \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n                \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n                \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n            },\n            \"user\": {\n                \"id\": 4,\n                \"name\": \"Test Barista\",\n                \"email\": \"barista3@test.com\",\n                \"email_verified_at\": null,\n                \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n                \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n            },\n            \"shots\": []\n        }\n    ],\n    \"first_page_url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost:8000/api/calibration-sessions?page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": null,\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": null,\n    \"path\": \"http://localhost:8000/api/calibration-sessions\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 2,\n    \"total\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Session",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"notes\": \"Updated: Successful calibration, locked in recipe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"notes\": \"Updated: Successful calibration, locked in recipe\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:53:19 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 3,\n    \"bean_id\": 2,\n    \"grinder_id\": 1,\n    \"user_id\": 4,\n    \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n    \"notes\": \"Updated: Successful calibration, locked in recipe\",\n    \"created_at\": \"2025-12-17T10:51:55.000000Z\",\n    \"updated_at\": \"2025-12-17T10:53:19.000000Z\",\n    \"bean\": {\n        \"id\": 2,\n        \"name\": \"Colombia Huila\",\n        \"origin\": \"Colombia\",\n        \"roastery\": \"ABC Roasters\",\n        \"roast_level\": \"light\",\n        \"roast_date\": \"2025-12-09T00:00:00.000000Z\",\n        \"notes\": \"Citrus, berry notes\",\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"updated_at\": \"2025-12-17T07:28:47.000000Z\"\n    },\n    \"grinder\": {\n        \"id\": 1,\n        \"name\": \"EK43\",\n        \"model\": \"Mahlkönig EK43\",\n        \"notes\": \"Updated: Excellent for single dosing, minimal static\",\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\",\n        \"updated_at\": \"2025-12-17T08:27:10.000000Z\"\n    },\n    \"user\": {\n        \"id\": 4,\n        \"name\": \"Test Barista\",\n        \"email\": \"barista3@test.com\",\n        \"email_verified_at\": null,\n        \"created_at\": \"2025-12-17T07:36:17.000000Z\",\n        \"updated_at\": \"2025-12-17T07:36:17.000000Z\"\n    },\n    \"shots\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Session",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:54:34 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Session deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Shots",
+			"item": [
+				{
+					"name": "List Shots for Session",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/2/shots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"2",
+								"shots"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/3/shots",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"3",
+										"shots"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:56:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "53"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 4,\n        \"calibration_session_id\": 3,\n        \"shot_number\": 1,\n        \"grind_setting\": \"15\",\n        \"dose\": \"18.00\",\n        \"yield\": \"36.00\",\n        \"time_seconds\": 32,\n        \"taste_notes\": \"Sour, under-extracted\",\n        \"action_taken\": \"Grind finer\",\n        \"created_at\": \"2025-12-17T10:56:16.000000Z\",\n        \"updated_at\": \"2025-12-17T10:56:16.000000Z\"\n    },\n    {\n        \"id\": 5,\n        \"calibration_session_id\": 3,\n        \"shot_number\": 2,\n        \"grind_setting\": \"15\",\n        \"dose\": \"18.00\",\n        \"yield\": \"36.00\",\n        \"time_seconds\": 34,\n        \"taste_notes\": \"Sour, under-extracted\",\n        \"action_taken\": \"Grind finer\",\n        \"created_at\": \"2025-12-17T10:56:40.000000Z\",\n        \"updated_at\": \"2025-12-17T10:56:40.000000Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create New Shot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"grind_setting\": \"15\",\r\n    \"dose\": 18.0,\r\n    \"yield\": 36.0,\r\n    \"time_seconds\": 28,\r\n    \"taste_notes\": \"Sour, under-extracted\",\r\n    \"action_taken\": \"Grind finer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/2/shots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"2",
+								"shots"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"grind_setting\": \"15\",\r\n    \"dose\": 18.0,\r\n    \"yield\": 36.0,\r\n    \"time_seconds\": 32,\r\n    \"taste_notes\": \"Sour, under-extracted\",\r\n    \"action_taken\": \"Grind finer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/3/shots",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"3",
+										"shots"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:56:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "56"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"calibration_session_id\": \"3\",\n    \"shot_number\": 1,\n    \"grind_setting\": \"15\",\n    \"dose\": \"18.00\",\n    \"yield\": \"36.00\",\n    \"time_seconds\": 32,\n    \"taste_notes\": \"Sour, under-extracted\",\n    \"action_taken\": \"Grind finer\",\n    \"updated_at\": \"2025-12-17T10:56:16.000000Z\",\n    \"created_at\": \"2025-12-17T10:56:16.000000Z\",\n    \"id\": 4\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Single Shot",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/2/shots/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"2",
+								"shots",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/3/shots/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"3",
+										"shots",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:58:45 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 4,\n    \"calibration_session_id\": 3,\n    \"shot_number\": 1,\n    \"grind_setting\": \"15\",\n    \"dose\": \"18.00\",\n    \"yield\": \"36.00\",\n    \"time_seconds\": 32,\n    \"taste_notes\": \"Sour, under-extracted\",\n    \"action_taken\": \"Grind finer\",\n    \"created_at\": \"2025-12-17T10:56:16.000000Z\",\n    \"updated_at\": \"2025-12-17T10:56:16.000000Z\",\n    \"calibration_session\": {\n        \"id\": 3,\n        \"bean_id\": 2,\n        \"grinder_id\": 1,\n        \"user_id\": 4,\n        \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n        \"notes\": \"Updated: Successful calibration, locked in recipe\",\n        \"created_at\": \"2025-12-17T10:51:55.000000Z\",\n        \"updated_at\": \"2025-12-17T10:53:19.000000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Shot",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taste_notes\": \"Updated: Still slightly sour, but better body\",\r\n    \"action_taken\": \"Increase yield to 38g\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/2/shots/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"2",
+								"shots",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"taste_notes\": \"Updated: Still slightly sour, but better body\",\r\n    \"action_taken\": \"Increase yield to 38g\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/3/shots/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"3",
+										"shots",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 10:59:46 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 4,\n    \"calibration_session_id\": 3,\n    \"shot_number\": 1,\n    \"grind_setting\": \"15\",\n    \"dose\": \"18.00\",\n    \"yield\": \"36.00\",\n    \"time_seconds\": 32,\n    \"taste_notes\": \"Updated: Still slightly sour, but better body\",\n    \"action_taken\": \"Increase yield to 38g\",\n    \"created_at\": \"2025-12-17T10:56:16.000000Z\",\n    \"updated_at\": \"2025-12-17T10:59:46.000000Z\",\n    \"calibration_session\": {\n        \"id\": 3,\n        \"bean_id\": 2,\n        \"grinder_id\": 1,\n        \"user_id\": 4,\n        \"session_date\": \"2024-01-20T00:00:00.000000Z\",\n        \"notes\": \"Updated: Successful calibration, locked in recipe\",\n        \"created_at\": \"2025-12-17T10:51:55.000000Z\",\n        \"updated_at\": \"2025-12-17T10:53:19.000000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Shot",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/calibration-sessions/3/shots/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"calibration-sessions",
+								"3",
+								"shots",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/calibration-sessions/3/shots/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"calibration-sessions",
+										"3",
+										"shots",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.25"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Dec 2025 11:00:20 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Shot deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "bean_id",
+			"value": ""
+		},
+		{
+			"key": "grinder_id",
+			"value": ""
+		},
+		{
+			"key": "session_id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "shot_id",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
