@@ -55,11 +55,19 @@ const ShotList = ({ sessionId, sessionDate }) => {
 
   const handleFormSubmit = async (shotData) => {
     try {
+      // Check if shot number already exists when creating (not editing)
+      if (!editingShot) {
+        const existingShot = shots.find(s => s.shot_number === shotData.shot_number);
+        if (existingShot) {
+          throw new Error(`Shot number ${shotData.shot_number} already exists for this session`);
+        }
+      }
+
       if (editingShot) {
         // Update existing shot
         const response = await shotAPI.updateShot(sessionId, editingShot.id, shotData);
         const updatedShot = response.data.data || response.data;
-        setShots(shots.map(shot => 
+        setShots(shots.map(shot =>
           shot.id === editingShot.id ? { ...updatedShot, id: editingShot.id } : shot
         ));
       } else {
