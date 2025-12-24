@@ -122,29 +122,32 @@ const SessionListPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-      <div className="max-w-7xl mx-auto p-4">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Header title="Espresso Calibrator" />
 
-        <div className="py-8">
-          <div className="mb-8">
-            <div className="md:flex md:items-center md:justify-between">
+        <div className="py-6 sm:py-8">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex-1 min-w-0">
-                <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl truncate">
                   Calibration Sessions
                 </h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 hidden sm:block">
                   Manage your espresso calibration sessions
                 </p>
+                <p className="mt-1 text-sm text-gray-500 sm:hidden">
+                  Manage sessions
+                </p>
               </div>
-              <div className="mt-4 flex md:mt-0 md:ml-4">
+              <div className="flex justify-end">
                 <button
                   onClick={handleAddSession}
-                  className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5 sm:hidden" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
                   </svg>
-                  Add Session
+                  <span>Add Session</span>
                 </button>
               </div>
             </div>
@@ -152,8 +155,8 @@ const SessionListPage = () => {
 
           {/* Search and filters */}
           <div className="mb-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
+            <div className="flex flex-col gap-4">
+              <div className="w-full">
                 <label htmlFor="search" className="sr-only">Search</label>
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -164,7 +167,7 @@ const SessionListPage = () => {
                   <input
                     type="text"
                     id="search"
-                    className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-12 py-2 sm:text-sm border-gray-300 rounded-md"
+                    className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-4 py-2 border-gray-300 rounded-md"
                     placeholder="Search sessions..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -206,7 +209,7 @@ const SessionListPage = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <div className="ml-5 w-0 flex-1">
+                    <div className="ml-4 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">Total Sessions</dt>
                         <dd className="flex items-baseline">
@@ -241,7 +244,7 @@ const SessionListPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {filteredSessions.map(session => (
                     <SessionCard
                       key={session.id}

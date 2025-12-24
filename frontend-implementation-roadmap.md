@@ -146,10 +146,41 @@ src/
 - Visual feedback for optimal parameters
 
 ### 6.2 Responsive Design
-- Mobile-first design approach
-- Touch-friendly controls for mobile
-- Optimized layouts for tablets
-- Desktop-optimized views for detailed analysis
+- Mobile-first design approach using Tailwind CSS utility classes
+- Breakpoint strategy:
+  - Mobile: up to 640px (sm)
+  - Tablet: 641px to 1024px (md)
+  - Desktop: 1025px and above (lg/xl)
+- Touch-friendly controls for mobile:
+  - Minimum 44px touch targets for buttons and interactive elements
+  - Swipe gestures for navigating between items where appropriate
+  - Touch-optimized forms with appropriate input types
+- Optimized layouts for tablets:
+  - Responsive grid systems that adapt to screen size
+  - Collapsible navigation menus
+  - Adjusted typography scales for readability
+- Desktop-optimized views for detailed analysis:
+  - Multi-column layouts for dashboard components
+  - Hover states and tooltips for additional information
+  - Larger data visualization areas
+- Specific responsive implementations:
+  - Responsive navigation: hamburger menu on mobile, full navigation on desktop
+  - Card layouts: single column on mobile, 2-column on tablet, 3-column on desktop
+  - Form layouts: stacked on mobile, side-by-side on desktop
+  - Table layouts: scrollable horizontal tables on mobile, full tables on desktop
+  - Chart components: smaller on mobile with drill-down capability, full-size on desktop
+- Responsive utility classes to implement:
+  - `sm:`, `md:`, `lg:`, `xl:` prefixed classes for different screen sizes
+  - Responsive spacing and padding adjustments
+  - Dynamic font sizing with `text-sm`, `text-base`, `text-lg`, etc.
+- Testing strategy:
+  - Test on actual devices when possible
+  - Use browser dev tools responsive mode for initial testing
+  - Implement responsive testing in CI/CD pipeline
+- Performance considerations:
+  - Optimize images for different screen densities
+  - Load appropriate assets based on screen size
+  - Consider different interaction patterns for touch vs. mouse
 
 ### 6.3 UX Enhancements
 - Loading states and skeleton screens

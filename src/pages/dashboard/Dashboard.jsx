@@ -48,12 +48,12 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-        <div className="max-w-7xl mx-auto p-4">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <Header title="Espresso Calibrator Dashboard" />
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading visualization data...</p>
+              <p className="mt-4 text-gray-600 text-base sm:text-lg">Loading visualization data...</p>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ const Dashboard = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-        <div className="max-w-7xl mx-auto p-4">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <Header title="Espresso Calibrator Dashboard" />
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
@@ -120,31 +120,31 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-      <div className="max-w-7xl mx-auto p-4">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Header title="Espresso Calibrator Dashboard" />
 
-        <main className="mt-8">
+        <main className="mt-6 sm:mt-8">
           {/* Stats Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-lg font-semibold text-gray-700">Total Shots</h3>
-              <p className="text-3xl font-bold text-amber-600">{summaryStats?.total_shots || 0}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Total Shots</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{summaryStats?.total_shots || 0}</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-lg font-semibold text-gray-700">Optimal Shots</h3>
-              <p className="text-3xl font-bold text-amber-600">{summaryStats?.optimal_shots || 0}</p>
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Optimal Shots</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{summaryStats?.optimal_shots || 0}</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-lg font-semibold text-gray-700">Optimal %</h3>
-              <p className="text-3xl font-bold text-amber-600">{summaryStats?.optimal_percentage || 0}%</p>
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Optimal %</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{summaryStats?.optimal_percentage || 0}%</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-lg font-semibold text-gray-700">Avg Yield</h3>
-              <p className="text-3xl font-bold text-amber-600">{summaryStats?.avg_extraction_yield || 0}</p>
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Avg Yield</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{summaryStats?.avg_extraction_yield || 0}</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-lg font-semibold text-gray-700">Avg Ratio</h3>
-              <p className="text-3xl font-bold text-amber-600">{summaryStats?.avg_extraction_ratio || 0}</p>
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Avg Ratio</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{summaryStats?.avg_extraction_ratio || 0}</p>
             </div>
           </div>
 
@@ -170,11 +170,11 @@ const Dashboard = () => {
           )}
 
           {/* Charts Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             {/* Extraction Yield Trends */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Extraction Yield Trends</h3>
-              <div className="h-80">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Extraction Yield Trends</h3>
+              <div className="h-64 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <ScatterChart data={extractionTrendsData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -189,9 +189,9 @@ const Dashboard = () => {
             </div>
 
             {/* Extraction Ratio vs Grind Setting */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Extraction Ratio vs Grind Setting</h3>
-              <div className="h-80">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Extraction Ratio vs Grind Setting</h3>
+              <div className="h-64 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <ScatterChart data={extractionTrendsData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -206,9 +206,9 @@ const Dashboard = () => {
             </div>
 
             {/* Bean Performance Comparison */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Bean Performance Comparison</h3>
-              <div className="h-80">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Bean Performance Comparison</h3>
+              <div className="h-64 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={extractionByBean}
@@ -232,9 +232,9 @@ const Dashboard = () => {
             </div>
 
             {/* Comparative Analysis */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Session Comparative Analysis</h3>
-              <div className="h-80">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Session Comparative Analysis</h3>
+              <div className="h-64 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={comparativeAnalysis?.data || []}
@@ -259,43 +259,43 @@ const Dashboard = () => {
           </div>
 
           {/* Extraction Trends Table */}
-          <div className="mt-8 bg-white p-6 rounded-xl shadow-md">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Recent Extraction Trends</h3>
+          <div className="mt-6 sm:mt-8 bg-white p-4 sm:p-6 rounded-xl shadow-md">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Recent Extraction Trends</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bean</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grind</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Yield</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ratio</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flow Rate</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bean</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grind</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Yield</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ratio</th>
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flow Rate</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {extractionTrendsData.slice(0, 10).map((shot, index) => (
                     <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {shot.session_date}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {shot.bean_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {shot.grind_setting}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {shot.time_seconds}s
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {shot.extraction_yield}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {shot.extraction_ratio}:1
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {shot.flow_rate}
                       </td>
                     </tr>
