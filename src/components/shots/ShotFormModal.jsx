@@ -39,13 +39,13 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // For numeric fields like dose, yield, and time_seconds, we need to convert to number
+
+    // For numeric fields like dose, yield, time_seconds, and water_temperature, we need to convert to number
     let processedValue = value;
-    if (name === 'dose' || name === 'yield' || name === 'time_seconds' || name === 'shot_number') {
+    if (name === 'dose' || name === 'yield' || name === 'time_seconds' || name === 'shot_number' || name === 'water_temperature') {
       processedValue = value === '' ? null : Number(value);
     }
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: processedValue
@@ -76,6 +76,7 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
         if (error.includes('Dose')) errorObj.dose = error;
         if (error.includes('Yield')) errorObj.yield = error;
         if (error.includes('Time')) errorObj.time_seconds = error;
+        if (error.includes('Water temperature')) errorObj.water_temperature = error;
       });
       setErrors(errorObj);
       setLoading(false);
@@ -237,6 +238,28 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
                         />
                         {errors.time_seconds && <p className="mt-1 text-sm text-red-600">{errors.time_seconds}</p>}
                       </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="water_temperature" className="block text-sm font-medium text-gray-700">
+                        Water Temperature (°C)
+                      </label>
+                      <input
+                        type="number"
+                        name="water_temperature"
+                        id="water_temperature"
+                        value={formData.water_temperature || ''}
+                        onChange={handleChange}
+                        min="80"
+                        max="100"
+                        step="0.1"
+                        className={`mt-1 block w-full border ${
+                          errors.water_temperature ? 'border-red-500' : 'border-gray-300'
+                        } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                        placeholder="e.g., 94.5"
+                      />
+                      {errors.water_temperature && <p className="mt-1 text-sm text-red-600">{errors.water_temperature}</p>}
+                      <p className="mt-1 text-xs text-gray-500">Typical range: 90-96°C for espresso</p>
                     </div>
 
                     <div>

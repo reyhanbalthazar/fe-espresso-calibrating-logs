@@ -2222,13 +2222,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{base_url}}/calibration-sessions/3/shots",
+									"raw": "{{base_url}}/calibration-sessions/4/shots",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"calibration-sessions",
-										"3",
+										"4",
 										"shots"
 									]
 								}
@@ -2255,7 +2255,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Wed, 17 Dec 2025 10:56:43 GMT"
+									"value": "Wed, 24 Dec 2025 11:51:45 GMT"
 								},
 								{
 									"key": "Content-Type",
@@ -2267,7 +2267,7 @@
 								},
 								{
 									"key": "X-RateLimit-Remaining",
-									"value": "53"
+									"value": "59"
 								},
 								{
 									"key": "Access-Control-Allow-Origin",
@@ -2275,7 +2275,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": 4,\n        \"calibration_session_id\": 3,\n        \"shot_number\": 1,\n        \"grind_setting\": \"15\",\n        \"dose\": \"18.00\",\n        \"yield\": \"36.00\",\n        \"time_seconds\": 32,\n        \"taste_notes\": \"Sour, under-extracted\",\n        \"action_taken\": \"Grind finer\",\n        \"created_at\": \"2025-12-17T10:56:16.000000Z\",\n        \"updated_at\": \"2025-12-17T10:56:16.000000Z\"\n    },\n    {\n        \"id\": 5,\n        \"calibration_session_id\": 3,\n        \"shot_number\": 2,\n        \"grind_setting\": \"15\",\n        \"dose\": \"18.00\",\n        \"yield\": \"36.00\",\n        \"time_seconds\": 34,\n        \"taste_notes\": \"Sour, under-extracted\",\n        \"action_taken\": \"Grind finer\",\n        \"created_at\": \"2025-12-17T10:56:40.000000Z\",\n        \"updated_at\": \"2025-12-17T10:56:40.000000Z\"\n    }\n]"
+							"body": "[\n    {\n        \"id\": 23,\n        \"calibration_session_id\": 4,\n        \"shot_number\": 1,\n        \"grind_setting\": \"11.5\",\n        \"dose\": \"17.40\",\n        \"yield\": \"41.76\",\n        \"time_seconds\": 35,\n        \"water_temperature\": \"94.74\",\n        \"taste_notes\": \"Earthy with herbal undertones\",\n        \"action_taken\": \"Initial shot - baseline for calibration\",\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\",\n        \"updated_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 24,\n        \"calibration_session_id\": 4,\n        \"shot_number\": 2,\n        \"grind_setting\": \"13.7\",\n        \"dose\": \"19.00\",\n        \"yield\": \"34.20\",\n        \"time_seconds\": 21,\n        \"water_temperature\": \"95.74\",\n        \"taste_notes\": \"Fruity with berry-like characteristics\",\n        \"action_taken\": \"Modified tamping pressure\",\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\",\n        \"updated_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 25,\n        \"calibration_session_id\": 4,\n        \"shot_number\": 3,\n        \"grind_setting\": \"11.1\",\n        \"dose\": \"17.10\",\n        \"yield\": \"39.33\",\n        \"time_seconds\": 28,\n        \"water_temperature\": \"91.42\",\n        \"taste_notes\": \"Clean and bright with honey sweetness\",\n        \"action_taken\": \"Changed water temperature\",\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\",\n        \"updated_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 26,\n        \"calibration_session_id\": 4,\n        \"shot_number\": 4,\n        \"grind_setting\": \"15.0\",\n        \"dose\": \"18.80\",\n        \"yield\": \"33.84\",\n        \"time_seconds\": 23,\n        \"water_temperature\": \"92.88\",\n        \"taste_notes\": \"Nutty and sweet with caramel finish\",\n        \"action_taken\": \"Adjusted pre-infusion time\",\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\",\n        \"updated_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 27,\n        \"calibration_session_id\": 4,\n        \"shot_number\": 5,\n        \"grind_setting\": \"9.6\",\n        \"dose\": \"17.30\",\n        \"yield\": \"34.60\",\n        \"time_seconds\": 24,\n        \"water_temperature\": \"93.19\",\n        \"taste_notes\": \"Floral and delicate with tea-like finish\",\n        \"action_taken\": \"Changed extraction time\",\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\",\n        \"updated_at\": \"2025-12-24T11:44:05.000000Z\"\n    }\n]"
 						}
 					]
 				},

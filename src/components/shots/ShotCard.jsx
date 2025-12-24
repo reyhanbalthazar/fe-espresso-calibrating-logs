@@ -8,7 +8,7 @@ const ShotCard = ({ shot, onEdit, onDelete }) => {
           <h4 className="text-md font-semibold text-gray-900">
             Shot #{shot.shot_number}
           </h4>
-          <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+          <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-2 text-sm">
             <div className="text-gray-700">
               <span className="font-medium">Grind Setting:</span> {shot.grind_setting}
             </div>
@@ -21,6 +21,11 @@ const ShotCard = ({ shot, onEdit, onDelete }) => {
             <div className="text-gray-700">
               <span className="font-medium">Time:</span> {shot.time_seconds}s
             </div>
+              <div className="text-gray-700">
+                <span className="font-medium">Water Temp:</span> {shot.water_temperature}°C
+              </div>
+            {/* {shot.water_temperature && (
+            )} */}
           </div>
           
           {shot.taste_notes && (

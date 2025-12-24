@@ -7,6 +7,7 @@ export const ShotSchema = {
   dose: null,
   yield: null,
   time_seconds: null,
+  water_temperature: null, // New field
   taste_notes: '',
   action_taken: '',
   created_at: null,
@@ -55,5 +56,14 @@ export const validateShotData = (shotData) => {
     errors.push('Time must be a whole number');
   }
   
+  // Validate water temperature if provided
+  if (shotData.water_temperature !== null && shotData.water_temperature !== undefined && shotData.water_temperature !== '') {
+    if (isNaN(shotData.water_temperature) || shotData.water_temperature <= 0) {
+      errors.push('Water temperature must be a positive number');
+    } else if (shotData.water_temperature > 100) {
+      errors.push('Water temperature should be below 100°C (boiling point)');
+    }
+  }
+
   return errors;
 };
