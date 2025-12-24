@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { registerValidationSchema } from '../utils/validation';
+import Header from '../components/common/Header';
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
@@ -61,12 +62,16 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-amber-800">Espresso Calibrator</h1>
-          <h2 className="text-xl mt-2 text-gray-700">Create Account</h2>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="max-w-7xl mx-auto p-4">
+        <Header title="Espresso Calibrator" />
+
+        <div className="flex items-center justify-center p-4">
+          <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-amber-800">Espresso Calibrator</h1>
+              <h2 className="text-xl mt-2 text-gray-700">Create Account</h2>
+            </div>
 
         {!success ? (
           <>
@@ -210,6 +215,8 @@ const RegisterPage = () => {
             </button>
           </div>
         )}
+      </div>
+        </div>
       </div>
     </div>
   );

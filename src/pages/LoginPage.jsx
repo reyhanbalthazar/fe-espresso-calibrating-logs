@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { loginValidationSchema } from '../utils/validation';
+import Header from '../components/common/Header';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -47,12 +48,16 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-amber-800">Espresso Calibrator</h1>
-          <h2 className="text-xl mt-2 text-gray-700">Sign In</h2>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="max-w-7xl mx-auto p-4">
+        <Header title="Espresso Calibrator" />
+
+        <div className="flex items-center justify-center p-4">
+          <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-amber-800">Espresso Calibrator</h1>
+              <h2 className="text-xl mt-2 text-gray-700">Sign In</h2>
+            </div>
 
         {loginSuccessMessage && (
           <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
@@ -132,6 +137,8 @@ const LoginPage = () => {
               Create one
             </a>
           </p>
+        </div>
+      </div>
         </div>
       </div>
     </div>

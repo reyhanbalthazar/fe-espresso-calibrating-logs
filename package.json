@@ -17,7 +17,9 @@
     "react": "^19.3.0-canary-88ee1f59-20251215",
     "react-dom": "^19.3.0-canary-88ee1f59-20251215",
     "react-hook-form": "^7.68.0",
+    "react-is": "^19.2.3",
     "react-router-dom": "^7.11.0",
+    "recharts": "^3.6.0",
     "tailwindcss": "^4.1.18",
     "yup": "^1.7.1"
   },
