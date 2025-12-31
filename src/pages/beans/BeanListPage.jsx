@@ -13,6 +13,7 @@ const BeanListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showFormModal, setShowFormModal] = useState(false);
   const [editingBean, setEditingBean] = useState(null);
+  const [activeTab, setActiveTab] = useState('all');
   const navigate = useNavigate();
   const { isAuthenticated, checkingAuthStatus } = useAuth();
 
@@ -95,6 +96,18 @@ const BeanListPage = () => {
       (bean.origin && bean.origin.toLowerCase().includes(searchTermLower)) ||
       (bean.notes && bean.notes.toLowerCase().includes(searchTermLower))
     );
+  });
+
+  // Filter beans based on active tab
+  const filteredBeansByTab = filteredBeans.filter(bean => {
+    if (activeTab === 'all') {
+      return true; // Show all beans
+    } else if (activeTab === 'single-origin') {
+      return !bean.is_blend; // Show only single origin beans (where is_blend is false)
+    } else if (activeTab === 'blend') {
+      return bean.is_blend; // Show only blend beans (where is_blend is true)
+    }
+    return true;
   });
 
   if (!isAuthenticated) {
@@ -181,7 +194,7 @@ const BeanListPage = () => {
             </div>
           ) : (
             <>
-              {/* Stats */}
+              {/* Stats and Tabs */}
               <div className="mb-6 bg-white overflow-hidden shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
                   <div className="flex items-center">
@@ -199,18 +212,58 @@ const BeanListPage = () => {
                       </dl>
                     </div>
                   </div>
+
+                  {/* Tabs */}
+                  <div className="mt-6 border-b border-gray-200">
+                    <nav className="-mb-px flex space-x-8">
+                      <button
+                        onClick={() => setActiveTab('all')}
+                        className={`${
+                          activeTab === 'all'
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                      >
+                        All Beans
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('single-origin')}
+                        className={`${
+                          activeTab === 'single-origin'
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                      >
+                        Single Origin
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('blend')}
+                        className={`${
+                          activeTab === 'blend'
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                      >
+                        Blend
+                      </button>
+                    </nav>
+                  </div>
                 </div>
               </div>
 
-              {/* Bean list */}
-              {filteredBeans.length === 0 ? (
+              {/* Filtered Bean list based on active tab */}
+              {filteredBeansByTab.length === 0 ? (
                 <div className="text-center py-12">
                   <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                   </svg>
                   <h3 className="mt-2 text-sm font-medium text-gray-900">No beans</h3>
                   <p className="mt-1 text-sm text-gray-500">
-                    Get started by creating a new bean.
+                    {activeTab === 'all'
+                      ? 'No beans found.'
+                      : activeTab === 'single-origin'
+                        ? 'No single origin beans found.'
+                        : 'No blend beans found.'}
                   </p>
                   <div className="mt-6">
                     <button
@@ -226,7 +279,7 @@ const BeanListPage = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredBeans.map(bean => (
+                  {filteredBeansByTab.map(bean => (
                     <BeanCard
                       key={bean.id}
                       bean={bean}

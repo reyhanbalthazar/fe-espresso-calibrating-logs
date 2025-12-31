@@ -51,6 +51,9 @@ const BeanCard = ({ bean, onEdit, onDelete }) => {
           <span className="font-medium">Origin:</span> {bean.origin || 'Not specified'}
         </div>
         <div className="text-sm text-gray-700">
+          <span className="font-medium">Type:</span> {bean.is_blend ? 'Blend' : 'Single Origin'}
+        </div>
+        <div className="text-sm text-gray-700">
           <span className="font-medium">Roast Level:</span> {getRoastLevelDisplay(bean.roast_level)}
         </div>
         {bean.roast_date && (

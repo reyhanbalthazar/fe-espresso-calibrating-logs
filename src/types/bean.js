@@ -14,6 +14,8 @@ export const BeanSchema = {
   roast_level: BEAN_ROAST_LEVELS.MEDIUM,
   roast_date: null,
   notes: '',
+  is_blend: false, // Default to false (single origin)
+  blendOrigins: [], // Array to store multiple origins for blends
   created_at: null,
   updated_at: null
 };
@@ -30,8 +32,21 @@ export const validateBeanData = (beanData) => {
     errors.push('Name must be less than 150 characters');
   }
 
-  if (beanData.origin && beanData.origin.length > 150) {
+  // For blends, check the combined length of all origins
+  if (beanData.is_blend && Array.isArray(beanData.blendOrigins)) {
+    const combinedOrigin = beanData.blendOrigins.filter(origin => origin.trim() !== '').join(', ');
+    if (combinedOrigin.length > 150) {
+      errors.push('Origin must be less than 150 characters');
+    }
+    if (combinedOrigin.trim() === '') {
+      errors.push('At least one origin is required for blends');
+    }
+  } else if (!beanData.is_blend && beanData.origin && beanData.origin.length > 150) {
     errors.push('Origin must be less than 150 characters');
+  }
+
+  if (!beanData.is_blend && !beanData.origin) {
+    errors.push('Origin is required for single origin beans');
   }
 
   if (beanData.roastery && beanData.roastery.length > 150) {
@@ -44,6 +59,11 @@ export const validateBeanData = (beanData) => {
 
   if (beanData.roast_date && isNaN(Date.parse(beanData.roast_date))) {
     errors.push('Invalid roast date');
+  }
+
+  // Validate is_blend field
+  if (typeof beanData.is_blend !== 'boolean') {
+    errors.push('Bean type must be either single origin or blend');
   }
 
   return errors;
