@@ -16,6 +16,10 @@ const SessionListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showFormModal, setShowFormModal] = useState(false);
   const [editingSession, setEditingSession] = useState(null);
+  const [dateRange, setDateRange] = useState({
+    startDate: '',
+    endDate: new Date().toISOString().split('T')[0] // Default to today's date
+  });
   const navigate = useNavigate();
   const { isAuthenticated, checkingAuthStatus } = useAuth();
 
@@ -100,21 +104,31 @@ const SessionListPage = () => {
     }
   };
 
-  // Filter sessions based on search term
-  const filteredSessions = sessions.filter(session => {
-    const searchTermLower = searchTerm.toLowerCase();
+  // Filter and sort sessions
+  const filteredSessions = sessions
+    .filter(session => {
+      // Date range filtering
+      const sessionDate = new Date(session.session_date);
+      const startDate = dateRange.startDate ? new Date(dateRange.startDate) : null;
+      const endDate = dateRange.endDate ? new Date(dateRange.endDate) : null;
 
-    // Find related bean and grinder
-    const bean = beans.find(b => b.id === session.bean_id);
-    const grinder = grinders.find(g => g.id === session.grinder_id);
+      const dateMatch = (!startDate || sessionDate >= startDate) &&
+                        (!endDate || sessionDate <= endDate);
 
-    return (
-      (bean && bean.name.toLowerCase().includes(searchTermLower)) ||
-      (grinder && grinder.name.toLowerCase().includes(searchTermLower)) ||
-      (session.session_date && session.session_date.toLowerCase().includes(searchTermLower)) ||
-      (session.notes && session.notes.toLowerCase().includes(searchTermLower))
-    );
-  });
+      // Search term filtering
+      const searchTermLower = searchTerm.toLowerCase();
+      const bean = beans.find(b => b.id === session.bean_id);
+      const grinder = grinders.find(g => g.id === session.grinder_id);
+
+      const searchMatch = !searchTerm ||
+        (bean && bean.name.toLowerCase().includes(searchTermLower)) ||
+        (grinder && grinder.name.toLowerCase().includes(searchTermLower)) ||
+        (session.session_date && session.session_date.toLowerCase().includes(searchTermLower)) ||
+        (session.notes && session.notes.toLowerCase().includes(searchTermLower));
+
+      return dateMatch && searchMatch;
+    })
+    .sort((a, b) => new Date(b.session_date) - new Date(a.session_date)); // Sort by date (newest first)
 
   if (!isAuthenticated) {
     return null; // Will be redirected by useEffect
@@ -174,6 +188,46 @@ const SessionListPage = () => {
                   />
                 </div>
               </div>
+
+              {/* Date range filter */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    id="startDate"
+                    className="focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-3 border-gray-300 rounded-md shadow-sm"
+                    value={dateRange.startDate}
+                    onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    id="endDate"
+                    className="focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-3 border-gray-300 rounded-md shadow-sm"
+                    value={dateRange.endDate}
+                    onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              {/* Reset date filters button */}
+              {(dateRange.startDate || dateRange.endDate) && (
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setDateRange({ startDate: '', endDate: '' })}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    Clear Date Filters
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

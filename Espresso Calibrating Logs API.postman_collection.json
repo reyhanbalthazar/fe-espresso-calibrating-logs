@@ -503,6 +503,12 @@
 										"key": "Authorization",
 										"value": "Bearer {{token}}",
 										"type": "text"
+									},
+									{
+										"key": "X-Coffee-Shop-Id",
+										"value": "1",
+										"type": "text",
+										"disabled": true
 									}
 								],
 								"url": {
@@ -537,7 +543,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Wed, 17 Dec 2025 09:58:18 GMT"
+									"value": "Wed, 31 Dec 2025 10:28:38 GMT"
 								},
 								{
 									"key": "Content-Type",
@@ -557,7 +563,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Ethiopia Guji\",\n        \"origin\": \"Ethiopia\",\n        \"roastery\": \"XYZ Coffee\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2025-12-12T00:00:00.000000Z\",\n        \"roast_age\": 5,\n        \"notes\": \"Floral, tea-like\",\n        \"sessions_count\": 1,\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Colombia Huila\",\n        \"origin\": \"Colombia\",\n        \"roastery\": \"ABC Roasters\",\n        \"roast_level\": \"light\",\n        \"roast_date\": \"2025-12-09T00:00:00.000000Z\",\n        \"roast_age\": 8,\n        \"notes\": \"Citrus, berry notes\",\n        \"sessions_count\": 0,\n        \"created_at\": \"2025-12-17T07:28:47.000000Z\"\n    }\n]"
+							"body": "[\n    {\n        \"id\": 13,\n        \"name\": \"Chrismast Blend 2025 - Batch 2\",\n        \"origin\": \"Indonesia, Colombia,\",\n        \"roastery\": \"Nitro\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2025-12-18T00:00:00.000000Z\",\n        \"roast_age\": 13,\n        \"is_blend\": false,\n        \"notes\": \"B2\",\n        \"sessions_count\": 0,\n        \"created_at\": \"2025-12-31T09:51:22.000000Z\"\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Chrismast Blend 2025 - Batch 1\",\n        \"origin\": \"Indonesia, Colombia,\",\n        \"roastery\": \"Nitro\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2025-12-18T00:00:00.000000Z\",\n        \"roast_age\": 13,\n        \"is_blend\": false,\n        \"notes\": \"B1\",\n        \"sessions_count\": 0,\n        \"created_at\": \"2025-12-31T09:50:54.000000Z\"\n    },\n    {\n        \"id\": 1,\n        \"name\": \"Ethiopia Guji\",\n        \"origin\": \"Ethiopia\",\n        \"roastery\": \"XYZ Coffee\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2025-12-19T00:00:00.000000Z\",\n        \"roast_age\": 12,\n        \"is_blend\": false,\n        \"notes\": \"Floral, tea-like with bright acidity\",\n        \"sessions_count\": 3,\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Colombia Huila\",\n        \"origin\": \"Colombia\",\n        \"roastery\": \"ABC Roasters\",\n        \"roast_level\": \"light\",\n        \"roast_date\": \"2025-12-16T00:00:00.000000Z\",\n        \"roast_age\": 15,\n        \"is_blend\": false,\n        \"notes\": \"Citrus, berry notes with caramel sweetness\",\n        \"sessions_count\": 5,\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Kenya AA\",\n        \"origin\": \"Kenya\",\n        \"roastery\": \"Premium Coffee Co.\",\n        \"roast_level\": \"medium\",\n        \"roast_date\": \"2025-12-21T00:00:00.000000Z\",\n        \"roast_age\": 10,\n        \"is_blend\": false,\n        \"notes\": \"Blackcurrant, wine-like with bright acidity\",\n        \"sessions_count\": 0,\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Guatemala Antigua\",\n        \"origin\": \"Guatemala\",\n        \"roastery\": \"Artisan Roasters\",\n        \"roast_level\": \"dark\",\n        \"roast_date\": \"2025-12-17T00:00:00.000000Z\",\n        \"roast_age\": 14,\n        \"is_blend\": false,\n        \"notes\": \"Chocolate, spice with full body\",\n        \"sessions_count\": 1,\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Costa Rica Tarrazu\",\n        \"origin\": \"Costa Rica\",\n        \"roastery\": \"Mountain Roasters\",\n        \"roast_level\": \"light\",\n        \"roast_date\": \"2025-12-22T00:00:00.000000Z\",\n        \"roast_age\": 9,\n        \"is_blend\": false,\n        \"notes\": \"Clean, bright with honey sweetness\",\n        \"sessions_count\": 2,\n        \"created_at\": \"2025-12-24T11:44:05.000000Z\"\n    }\n]"
 						}
 					]
 				},
