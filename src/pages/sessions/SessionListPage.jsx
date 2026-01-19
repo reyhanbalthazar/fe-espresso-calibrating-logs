@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sessionAPI, beanAPI, grinderAPI, shotAPI } from '../../services/api';
-import SessionCard from '../../components/sessions/SessionCard';
 import SessionFormModal from '../../components/sessions/SessionFormModal';
+import ShotList from '../../components/sessions/ShotList';
 import { useAuth } from '../../contexts/AuthContext';
 import Header from '../../components/common/Header';
 
@@ -20,6 +20,7 @@ const SessionListPage = () => {
     startDate: '',
     endDate: new Date().toISOString().split('T')[0] // Default to today's date
   });
+  const [expandedSessions, setExpandedSessions] = useState([]);
   const navigate = useNavigate();
   const { isAuthenticated, checkingAuthStatus } = useAuth();
 
@@ -45,9 +46,45 @@ const SessionListPage = () => {
           grinderAPI.getAllGrinders()
         ]);
 
-        setSessions(sessionsResponse.data.data || sessionsResponse.data);
-        setBeans(beansResponse.data.data || beansResponse.data);
-        setGrinders(grindersResponse.data.data || grindersResponse.data);
+        console.log('Beans API response:', beansResponse);
+        console.log('Beans data:', beansResponse.data);
+
+        // Handle different response structures
+        let sessionsData = sessionsResponse.data;
+        let beansData = beansResponse.data;
+        let grindersData = grindersResponse.data;
+
+        // Check if data is nested in a data property
+        if (sessionsResponse.data && sessionsResponse.data.data) {
+          sessionsData = sessionsResponse.data.data;
+        }
+        if (beansResponse.data && beansResponse.data.data) {
+          beansData = beansResponse.data.data;
+        }
+        if (grindersResponse.data && grindersResponse.data.data) {
+          grindersData = grindersResponse.data.data;
+        }
+
+        console.log('Processed beans data:', beansData);
+        console.log('First bean item:', beansData[0]);
+
+        // Enrich sessions with bean and grinder data
+        const enrichedSessions = sessionsData.map(session => {
+          const bean = beansData.find(b => b.id === session.bean_id);
+          const grinder = grindersData.find(g => g.id === session.grinder_id);
+
+          return {
+            ...session,
+            bean,  // Attach the full bean object
+            grinder  // Attach the full grinder object
+          };
+        });
+
+        console.log('Enriched sessions:', enrichedSessions);
+
+        setSessions(enrichedSessions || []);
+        setBeans(beansData || []);
+        setGrinders(grindersData || []);
       } catch (err) {
         setError(err.message || 'Failed to load data');
         console.error('Error fetching data:', err);
@@ -86,22 +123,81 @@ const SessionListPage = () => {
 
   const handleFormSubmit = async (sessionData) => {
     try {
+      let response;
       if (editingSession) {
         // Update existing session
-        const response = await sessionAPI.updateSession(editingSession.id, sessionData);
+        response = await sessionAPI.updateSession(editingSession.id, sessionData);
         const updatedSession = response.data.data || response.data;
         setSessions(sessions.map(session =>
           session.id === editingSession.id ? { ...updatedSession, id: editingSession.id } : session
         ));
       } else {
         // Create new session
-        const response = await sessionAPI.createSession(sessionData);
+        response = await sessionAPI.createSession(sessionData);
         const newSession = response.data.data || response.data;
-        setSessions([...sessions, newSession]);
+
+        console.log('New session created:', newSession);
+
+        // Create an enriched session with bean and grinder data
+        // First, try to find the bean and grinder from our existing state
+        const existingBean = beans.find(b => b.id === newSession.bean_id);
+        const existingGrinder = grinders.find(g => g.id === newSession.grinder_id);
+
+        console.log('Found existing bean:', existingBean);
+        console.log('Found existing grinder:', existingGrinder);
+
+        let beanData = existingBean;
+        let grinderData = existingGrinder;
+
+        // If we don't have it in existing state, fetch it
+        if (!beanData) {
+          console.log('Fetching bean data...');
+          try {
+            const beanResponse = await beanAPI.getBeanById(newSession.bean_id);
+            console.log('Bean API response:', beanResponse);
+            beanData = beanResponse.data.data || beanResponse.data || beanResponse;
+            console.log('Extracted bean data:', beanData);
+          } catch (err) {
+            console.error('Error fetching bean:', err);
+          }
+        }
+
+        if (!grinderData) {
+          console.log('Fetching grinder data...');
+          try {
+            const grinderResponse = await grinderAPI.getGrinderById(newSession.grinder_id);
+            console.log('Grinder API response:', grinderResponse);
+            grinderData = grinderResponse.data.data || grinderResponse.data || grinderResponse;
+            console.log('Extracted grinder data:', grinderData);
+          } catch (err) {
+            console.error('Error fetching grinder:', err);
+          }
+        }
+
+        const enrichedNewSession = {
+          ...newSession,
+          bean: beanData,  // Use 'bean' instead of 'bean_data' for consistency
+          grinder: grinderData  // Use 'grinder' instead of 'grinder_data'
+        };
+
+        console.log('Enriched session to be added:', enrichedNewSession);
+
+        // Add the enriched session to the list
+        setSessions(prevSessions => [enrichedNewSession, ...prevSessions]);
       }
+
+      setShowFormModal(false);
+      setEditingSession(null);
     } catch (err) {
+      console.error('Error in handleFormSubmit:', err);
       throw new Error(err.response?.data?.message || err.message || 'Failed to save session');
     }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Not set';
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   };
 
   // Filter and sort sessions
@@ -113,7 +209,7 @@ const SessionListPage = () => {
       const endDate = dateRange.endDate ? new Date(dateRange.endDate) : null;
 
       const dateMatch = (!startDate || sessionDate >= startDate) &&
-                        (!endDate || sessionDate <= endDate);
+        (!endDate || sessionDate <= endDate);
 
       // Search term filtering
       const searchTermLower = searchTerm.toLowerCase();
@@ -175,7 +271,7 @@ const SessionListPage = () => {
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                      <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.416l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                     </svg>
                   </div>
                   <input
@@ -200,7 +296,7 @@ const SessionListPage = () => {
                     id="startDate"
                     className="focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-3 border-gray-300 rounded-md shadow-sm"
                     value={dateRange.startDate}
-                    onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
+                    onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
                   />
                 </div>
                 <div>
@@ -212,7 +308,7 @@ const SessionListPage = () => {
                     id="endDate"
                     className="focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-3 border-gray-300 rounded-md shadow-sm"
                     value={dateRange.endDate}
-                    onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
+                    onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
                   />
                 </div>
               </div>
@@ -291,24 +387,142 @@ const SessionListPage = () => {
                       className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+                        <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 010 2h-3v3a1 1 0 01-2 0v-3H6a1 1 0 010-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
                       </svg>
                       Add Session
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredSessions.map(session => (
-                    <SessionCard
-                      key={session.id}
-                      session={session}
-                      beans={beans}
-                      grinders={grinders}
-                      onEdit={handleEditSession}
-                      onDelete={handleDeleteSession}
-                    />
-                  ))}
+                <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Bean & Grinder
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Date
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Notes
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {filteredSessions.map(session => {
+                        // Check for both naming conventions
+                        const bean = session.bean || session.bean_data || beans.find(b => b.id === session.bean_id);
+                        const grinder = session.grinder || session.grinder_data || grinders.find(g => g.id === session.grinder_id);
+
+                        console.log('Session ID:', session.id);
+                        console.log('Session bean_id:', session.bean_id);
+                        console.log('Found bean:', bean);
+                        console.log('Bean name:', bean?.name);
+                        console.log('All beans in state:', beans);
+
+                        return (
+                          <Fragment key={session.id}>
+                            <tr
+                              className="hover:bg-gray-50 cursor-pointer"
+                              onClick={() => {
+                                const currentExpanded = expandedSessions.includes(session.id);
+                                if (currentExpanded) {
+                                  setExpandedSessions(expandedSessions.filter(id => id !== session.id));
+                                } else {
+                                  setExpandedSessions([...expandedSessions, session.id]);
+                                }
+                              }}
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {bean && typeof bean === 'object' && bean.name
+                                    ? bean.name
+                                    : `Unknown Bean (ID: ${session.bean_id})`}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {grinder && typeof grinder === 'object' && grinder.name
+                                    ? grinder.name
+                                    : 'Unknown Grinder'}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {formatDate(session.session_date)}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm text-gray-900 max-w-xs truncate">
+                                  {session.notes || '-'}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div className="flex justify-end space-x-2">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation(); // Prevent row click from triggering
+                                      const currentExpanded = expandedSessions.includes(session.id);
+                                      if (currentExpanded) {
+                                        setExpandedSessions(expandedSessions.filter(id => id !== session.id));
+                                      } else {
+                                        setExpandedSessions([...expandedSessions, session.id]);
+                                      }
+                                    }}
+                                    className="text-green-600 hover:text-green-900 p-1 rounded-full hover:bg-green-50"
+                                    aria-label={expandedSessions.includes(session.id) ? "Collapse shots" : "Expand shots"}
+                                  >
+                                    {expandedSessions.includes(session.id) ? (
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 010 2H6a1 1 0 01-1-1z" clipRule="evenodd" />
+                                      </svg>
+                                    ) : (
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 010 2h-3v3a1 1 0 01-2 0v-3H6a1 1 0 010-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+                                      </svg>
+                                    )}
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation(); // Prevent row click from triggering
+                                      handleEditSession(session);
+                                    }}
+                                    className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
+                                    aria-label="Edit session"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                    </svg>
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation(); // Prevent row click from triggering
+                                      handleDeleteSession(session.id);
+                                    }}
+                                    className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
+                                    aria-label="Delete session"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                            {expandedSessions.includes(session.id) && (
+                              <tr>
+                                <td colSpan="4" className="px-6 py-4 bg-gray-50">
+                                  <ShotList sessionId={session.id} sessionDate={session.session_date} />
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </>
