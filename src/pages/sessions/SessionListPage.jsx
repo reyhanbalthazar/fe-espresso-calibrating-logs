@@ -34,66 +34,6 @@ const SessionListPage = () => {
   useEffect(() => {
     if (!isAuthenticated || checkingAuthStatus) return;
 
-    const fetchAllData = async () => {
-      try {
-        setLoading(true);
-        setDataLoading(true);
-
-        // Fetch sessions, beans, and grinders in parallel
-        const [sessionsResponse, beansResponse, grindersResponse] = await Promise.all([
-          sessionAPI.getAllSessions(),
-          beanAPI.getAllBeans(),
-          grinderAPI.getAllGrinders()
-        ]);
-
-        console.log('Beans API response:', beansResponse);
-        console.log('Beans data:', beansResponse.data);
-
-        // Handle different response structures
-        let sessionsData = sessionsResponse.data;
-        let beansData = beansResponse.data;
-        let grindersData = grindersResponse.data;
-
-        // Check if data is nested in a data property
-        if (sessionsResponse.data && sessionsResponse.data.data) {
-          sessionsData = sessionsResponse.data.data;
-        }
-        if (beansResponse.data && beansResponse.data.data) {
-          beansData = beansResponse.data.data;
-        }
-        if (grindersResponse.data && grindersResponse.data.data) {
-          grindersData = grindersResponse.data.data;
-        }
-
-        console.log('Processed beans data:', beansData);
-        console.log('First bean item:', beansData[0]);
-
-        // Enrich sessions with bean and grinder data
-        const enrichedSessions = sessionsData.map(session => {
-          const bean = beansData.find(b => b.id === session.bean_id);
-          const grinder = grindersData.find(g => g.id === session.grinder_id);
-
-          return {
-            ...session,
-            bean,  // Attach the full bean object
-            grinder  // Attach the full grinder object
-          };
-        });
-
-        console.log('Enriched sessions:', enrichedSessions);
-
-        setSessions(enrichedSessions || []);
-        setBeans(beansData || []);
-        setGrinders(grindersData || []);
-      } catch (err) {
-        setError(err.message || 'Failed to load data');
-        console.error('Error fetching data:', err);
-      } finally {
-        setLoading(false);
-        setDataLoading(false);
-      }
-    };
-
     fetchAllData();
   }, [isAuthenticated, checkingAuthStatus]);
 
@@ -118,6 +58,67 @@ const SessionListPage = () => {
     } catch (err) {
       setError(err.message || 'Failed to delete session');
       console.error('Error deleting session:', err);
+    }
+  };
+
+  // Function to fetch all data
+  const fetchAllData = async () => {
+    try {
+      setLoading(true);
+      setDataLoading(true);
+
+      // Fetch sessions, beans, and grinders in parallel
+      const [sessionsResponse, beansResponse, grindersResponse] = await Promise.all([
+        sessionAPI.getAllSessions(),
+        beanAPI.getAllBeans(),
+        grinderAPI.getAllGrinders()
+      ]);
+
+      console.log('Beans API response:', beansResponse);
+      console.log('Beans data:', beansResponse.data);
+
+      // Handle different response structures
+      let sessionsData = sessionsResponse.data;
+      let beansData = beansResponse.data;
+      let grindersData = grindersResponse.data;
+
+      // Check if data is nested in a data property
+      if (sessionsResponse.data && sessionsResponse.data.data) {
+        sessionsData = sessionsResponse.data.data;
+      }
+      if (beansResponse.data && beansResponse.data.data) {
+        beansData = beansResponse.data.data;
+      }
+      if (grindersResponse.data && grindersResponse.data.data) {
+        grindersData = grindersResponse.data.data;
+      }
+
+      console.log('Processed beans data:', beansData);
+      console.log('First bean item:', beansData[0]);
+
+      // Enrich sessions with bean and grinder data
+      const enrichedSessions = sessionsData.map(session => {
+        const bean = beansData.find(b => b.id === session.bean_id);
+        const grinder = grindersData.find(g => g.id === session.grinder_id);
+
+        return {
+          ...session,
+          bean,  // Attach the full bean object
+          grinder  // Attach the full grinder object
+        };
+      });
+
+      console.log('Enriched sessions:', enrichedSessions);
+
+      setSessions(enrichedSessions || []);
+      setBeans(beansData || []);
+      setGrinders(grindersData || []);
+    } catch (err) {
+      setError(err.message || 'Failed to load data');
+      console.error('Error fetching data:', err);
+    } finally {
+      setLoading(false);
+      setDataLoading(false);
     }
   };
 
@@ -188,6 +189,11 @@ const SessionListPage = () => {
 
       setShowFormModal(false);
       setEditingSession(null);
+
+      // Refresh the data after submitting a new session to update the UI
+      if (!editingSession) {
+        fetchAllData();
+      }
     } catch (err) {
       console.error('Error in handleFormSubmit:', err);
       throw new Error(err.response?.data?.message || err.message || 'Failed to save session');
