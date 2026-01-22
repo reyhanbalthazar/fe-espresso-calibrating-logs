@@ -79,4 +79,17 @@ export const shotAPI = {
   deleteShot: (sessionId, shotId) => api.delete(`/calibration-sessions/${sessionId}/shots/${shotId}`),
 };
 
+export const dashboardAPI = {
+  // Get comprehensive dashboard data
+  getDashboardData: async () => {
+    try {
+      const response = await api.get('/dashboard-data');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      throw error;
+    }
+  }
+};
+
 export default api;
