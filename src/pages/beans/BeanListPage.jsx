@@ -251,7 +251,7 @@ const BeanListPage = () => {
                 </div>
               </div>
 
-              {/* Filtered Bean list based on active tab */}
+              {/* Bean list - Table View */}
               {filteredBeansByTab.length === 0 ? (
                 <div className="text-center py-12">
                   <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -278,15 +278,138 @@ const BeanListPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredBeansByTab.map(bean => (
-                    <BeanCard
-                      key={bean.id}
-                      bean={bean}
-                      onEdit={handleEditBean}
-                      onDelete={handleDeleteBean}
-                    />
-                  ))}
+                <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+                  {/* Desktop/tablet view - horizontal scrolling for small screens */}
+                  <div className="hidden sm:block overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Bean Name
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Origin
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Roast Level
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Type
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {filteredBeansByTab.map(bean => (
+                          <tr key={bean.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-900 hover:text-blue-600 cursor-pointer underline decoration-dotted"
+                                   onClick={() => navigate(`/beans/${bean.id}/sessions`)}>
+                                {bean.name || bean.bean_name || 'Unnamed Bean'}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {bean.roastery || 'Roastery Unknown'}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {bean.origin || 'Origin Unknown'}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {bean.roast_level || 'Level Unknown'}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                bean.is_blend ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
+                              }`}>
+                                {bean.is_blend ? 'Blend' : 'Single Origin'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                              <div className="flex justify-end space-x-2">
+                                <button
+                                  onClick={() => handleEditBean(bean)}
+                                  className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
+                                  aria-label="Edit bean"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                  </svg>
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteBean(bean.id)}
+                                  className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
+                                  aria-label="Delete bean"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile view - card layout */}
+                  <div className="sm:hidden">
+                    {filteredBeansByTab.map(bean => (
+                      <div key={bean.id} className="border-b border-gray-200 p-4 bg-white">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-gray-900 truncate hover:text-blue-600 cursor-pointer underline decoration-dotted"
+                                 onClick={() => navigate(`/beans/${bean.id}/sessions`)}>
+                              {bean.name || bean.bean_name || 'Unnamed Bean'}
+                            </div>
+                            <div className="text-sm text-gray-500 mt-1">
+                              {bean.roastery || 'Roastery Unknown'}
+                            </div>
+                            <div className="text-sm text-gray-900 mt-1">
+                              <span className="font-medium">Origin:</span> {bean.origin || 'Origin Unknown'}
+                            </div>
+                            <div className="text-sm text-gray-900 mt-1">
+                              <span className="font-medium">Roast Level:</span> {bean.roast_level || 'Level Unknown'}
+                            </div>
+                            <div className="text-sm text-gray-900 mt-1">
+                              <span className="font-medium">Type:</span>{' '}
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                bean.is_blend ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
+                              }`}>
+                                {bean.is_blend ? 'Blend' : 'Single Origin'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex space-x-2 ml-4">
+                            <button
+                              onClick={() => handleEditBean(bean)}
+                              className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
+                              aria-label="Edit bean"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteBean(bean.id)}
+                              className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
+                              aria-label="Delete bean"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </>

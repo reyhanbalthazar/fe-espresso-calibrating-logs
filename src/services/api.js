@@ -47,6 +47,7 @@ export const authAPI = {
 export const beanAPI = {
   getAllBeans: () => api.get('/beans'),
   getBeanById: (id) => api.get(`/beans/${id}`),
+  getBeanSessions: (id) => api.get(`/beans/${id}/sessions`),
   createBean: (beanData) => api.post('/beans', beanData),
   updateBean: (id, beanData) => api.put(`/beans/${id}`, beanData),
   deleteBean: (id) => api.delete(`/beans/${id}`),

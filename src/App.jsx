@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import BeanListPage from './pages/beans/BeanListPage';
+import BeanSessionsPage from './pages/beans/BeanSessionsPage';
 import GrinderListPage from './pages/grinders/GrinderListPage';
 import SessionListPage from './pages/sessions/SessionListPage';
 import Dashboard from './pages/dashboard/Dashboard';
@@ -22,6 +23,11 @@ function App() {
           <Route path="/beans" element={
             <ProtectedRoute>
               <BeanListPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/beans/:beanId/sessions" element={
+            <ProtectedRoute>
+              <BeanSessionsPage />
             </ProtectedRoute>
           } />
           <Route path="/grinders" element={
