@@ -229,10 +229,16 @@ const BeanSessionsPage = () => {
                             </div>
                           </td>
                         </tr>
-                        {expandedSessions.includes(session.id) && (
-                          <tr>
-                            <td colSpan="5" className="px-6 py-4 bg-gray-50">
-                              <div className="mb-4">
+                        <tr>
+                          <td colSpan="5" className="px-6 py-0 bg-gray-50">
+                            <div
+                              className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                                expandedSessions.includes(session.id)
+                                  ? 'max-h-[1000px] opacity-100'
+                                  : 'max-h-0 opacity-0'
+                              }`}
+                            >
+                              <div className="py-4">
                                 <h4 className="text-sm font-medium text-gray-900 mb-2">Shots for this session</h4>
                                 <div className="overflow-x-auto">
                                   <table className="min-w-full divide-y divide-gray-200">
@@ -301,9 +307,9 @@ const BeanSessionsPage = () => {
                                   </table>
                                 </div>
                               </div>
-                            </td>
-                          </tr>
-                        )}
+                            </div>
+                          </td>
+                        </tr>
                       </React.Fragment>
                     ))}
                   </tbody>
@@ -358,8 +364,14 @@ const BeanSessionsPage = () => {
                         </div>
                       </div>
 
-                      {expandedSessions.includes(session.id) && (
-                        <div className="mt-4 pt-4 border-t border-gray-100">
+                      <div
+                        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                          expandedSessions.includes(session.id)
+                            ? 'max-h-[1000px] opacity-100 mt-4 pt-4 border-t border-gray-100'
+                            : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <div className="pt-4 border-t border-gray-100">
                           <h4 className="text-sm font-medium text-gray-900 mb-2">Shots for this session</h4>
                           <div className="space-y-3">
                             {session.shots.map(shot => (
@@ -380,7 +392,7 @@ const BeanSessionsPage = () => {
                             ))}
                           </div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 ))}

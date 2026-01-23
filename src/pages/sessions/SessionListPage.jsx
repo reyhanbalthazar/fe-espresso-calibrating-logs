@@ -519,13 +519,21 @@ const SessionListPage = () => {
                                   </div>
                                 </td>
                               </tr>
-                              {expandedSessions.includes(session.id) && (
-                                <tr>
-                                  <td colSpan="4" className="px-6 py-4 bg-gray-50">
-                                    <ShotList sessionId={session.id} sessionDate={session.session_date} />
-                                  </td>
-                                </tr>
-                              )}
+                              <tr>
+                                <td colSpan="4" className="px-6 py-0 bg-gray-50">
+                                  <div
+                                    className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                                      expandedSessions.includes(session.id)
+                                        ? 'max-h-[1000px] opacity-100'
+                                        : 'max-h-0 opacity-0'
+                                    }`}
+                                  >
+                                    <div className="py-4">
+                                      <ShotList sessionId={session.id} sessionDate={session.session_date} />
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
                             </Fragment>
                           );
                         })}
@@ -623,11 +631,17 @@ const SessionListPage = () => {
                               </div>
                             </div>
 
-                            {expandedSessions.includes(session.id) && (
-                              <div className="mt-4 pt-4 border-t border-gray-100">
+                            <div
+                              className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                                expandedSessions.includes(session.id)
+                                  ? 'max-h-[1000px] opacity-100 mt-4 pt-4 border-t border-gray-100'
+                                  : 'max-h-0 opacity-0'
+                              }`}
+                            >
+                              <div className="pt-4 border-t border-gray-100">
                                 <ShotList sessionId={session.id} sessionDate={session.session_date} />
                               </div>
-                            )}
+                            </div>
                           </div>
                         </div>
                       );
