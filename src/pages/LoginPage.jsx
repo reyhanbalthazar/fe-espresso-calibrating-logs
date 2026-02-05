@@ -122,8 +122,8 @@ const LoginPage = () => {
             disabled={loading}
             className={`w-full py-3 px-4 rounded-lg text-white font-medium ${
               loading
-                ? 'bg-amber-400 cursor-not-allowed'
-                : 'bg-amber-600 hover:bg-amber-700 active:bg-amber-800'
+                ? 'bg-blue-400 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
             } transition-colors duration-200`}
           >
             {loading ? 'Signing In...' : 'Sign In'}
