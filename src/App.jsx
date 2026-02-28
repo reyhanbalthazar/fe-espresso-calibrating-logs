@@ -13,7 +13,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 function App() {
   return (
     <AuthProvider>
-      <Router basename="/fe-calibrating-logs">
+      <Router basename="/fe-espresso-calibrating-logs">
         <Routes>
           <Route path="/" element={
             <ProtectedRoute>
