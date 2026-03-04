@@ -158,261 +158,245 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
   }));
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        {/* Background overlay */}
-        <div
-          className="fixed inset-0 transition-opacity"
-          aria-hidden="true"
-          onClick={handleClose}
-        >
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        onClick={handleClose}
+      />
 
-        {/* Modal panel */}
-        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <form onSubmit={handleSubmit}>
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    {bean ? 'Edit Bean' : 'Add New Bean'}
-                  </h3>
-                  <div className="mt-4 space-y-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                        Name *
-                      </label>
+      {/* Modal */}
+      <div className="relative w-full max-w-2xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+
+        <form onSubmit={handleSubmit}>
+
+          {/* Header */}
+          <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-900">
+                {bean ? 'Edit Bean' : 'Add New Bean'}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Manage your coffee bean details and roast profile
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="text-gray-400 hover:text-gray-700 transition"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="px-8 py-6 space-y-8 max-h-[70vh] overflow-y-auto">
+
+            {/* Basic Info */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+                Basic Information
+              </h3>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Bean Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name || ''}
+                  onChange={handleChange}
+                  className={`mt-1 w-full rounded-xl border px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${errors.name ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                  placeholder="Ethiopia Guji Natural"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Roastery
+                </label>
+                <input
+                  type="text"
+                  name="roastery"
+                  value={formData.roastery || ''}
+                  onChange={handleChange}
+                  className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  placeholder="Local Roasters Co."
+                />
+              </div>
+            </div>
+
+            {/* Bean Type */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+                Bean Type
+              </h3>
+
+              <div className="flex space-x-4">
+                {['false', 'true'].map(value => {
+                  const isBlend = value === 'true';
+                  const active = formData.is_blend === isBlend;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() =>
+                        setFormData(prev => ({
+                          ...prev,
+                          is_blend: isBlend
+                        }))
+                      }
+                      className={`flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition ${active
+                          ? 'bg-amber-100 border-amber-400 text-amber-800'
+                          : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                        }`}
+                    >
+                      {isBlend ? 'Blend' : 'Single Origin'}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Origin Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+                Origin Information
+              </h3>
+
+              {!formData.is_blend ? (
+                <input
+                  type="text"
+                  name="origin"
+                  value={formData.origin || ''}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  placeholder="Ethiopia, Colombia, Brazil..."
+                />
+              ) : (
+                <div className="space-y-3">
+                  {formData.blendOrigins?.map((origin, index) => (
+                    <div key={index} className="flex space-x-2">
                       <input
                         type="text"
-                        name="name"
-                        id="name"
-                        value={formData.name || ''}
-                        onChange={handleChange}
-                        className={`mt-1 block w-full border ${errors.name ? 'border-red-500' : 'border-gray-300'
-                          } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                        placeholder="Enter bean name"
-                      />
-                      {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
-                    </div>
-
-                    <div>
-                      <label htmlFor="roastery" className="block text-sm font-medium text-gray-700">
-                        Roastery
-                      </label>
-                      <input
-                        type="text"
-                        name="roastery"
-                        id="roastery"
-                        value={formData.roastery || ''}
-                        onChange={handleChange}
-                        className={`mt-1 block w-full border ${errors.roastery ? 'border-red-500' : 'border-gray-300'
-                          } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                        placeholder="Enter roastery name"
-                      />
-                      {errors.roastery && <p className="mt-1 text-sm text-red-600">{errors.roastery}</p>}
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="is_blend" className="block text-sm font-medium text-gray-700">
-                        Bean Type
-                      </label>
-                      <select
-                        name="is_blend"
-                        id="is_blend"
-                        value={formData.is_blend ? 'true' : 'false'}
+                        value={origin}
                         onChange={(e) => {
+                          const newOrigins = [...formData.blendOrigins];
+                          newOrigins[index] = e.target.value;
                           setFormData(prev => ({
                             ...prev,
-                            is_blend: e.target.value === 'true'
+                            blendOrigins: newOrigins
                           }));
-
-                          // Clear error for this field when user selects
-                          if (errors.is_blend) {
-                            setErrors(prev => ({
-                              ...prev,
-                              is_blend: ''
-                            }));
-                          }
                         }}
-                        className={`mt-1 block w-full border ${errors.is_blend ? 'border-red-500' : 'border-gray-300'
-                          } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                      >
-                        <option value="false">Single Origin</option>
-                        <option value="true">Blend</option>
-                      </select>
-                      {errors.is_blend && <p className="mt-1 text-sm text-red-600">{errors.is_blend}</p>}
-                    </div>
-
-                    {/* Origin field for Single Origin or Blend origins */}
-                    {!formData.is_blend ? (
-                      // Single Origin: Single input field
-                      <div>
-                        <label htmlFor="origin" className="block text-sm font-medium text-gray-700">
-                          Origin
-                        </label>
-                        <input
-                          type="text"
-                          name="origin"
-                          id="origin"
-                          value={formData.origin || ''}
-                          onChange={handleChange}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                          placeholder="Enter origin location"
-                        />
-                      </div>
-                    ) : (
-                      // Blend: Multiple input fields with add/remove functionality
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Blend Origins
-                        </label>
-                        <div className="mt-1 space-y-2">
-                          {formData.blendOrigins && formData.blendOrigins.length > 0 ? (
-                            formData.blendOrigins.map((origin, index) => (
-                              <div key={index} className="flex items-center space-x-2">
-                                <input
-                                  type="text"
-                                  value={origin}
-                                  onChange={(e) => {
-                                    const newOrigins = [...formData.blendOrigins];
-                                    newOrigins[index] = e.target.value;
-                                    setFormData(prev => ({
-                                      ...prev,
-                                      blendOrigins: newOrigins
-                                    }));
-                                  }}
-                                  className="flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                  placeholder={`Origin ${index + 1}`}
-                                />
-                                {formData.blendOrigins.length > 1 && (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      const newOrigins = formData.blendOrigins.filter((_, i) => i !== index);
-                                      setFormData(prev => ({
-                                        ...prev,
-                                        blendOrigins: newOrigins
-                                      }));
-                                    }}
-                                    className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                  >
-                                    Remove
-                                  </button>
-                                )}
-                              </div>
-                            ))
-                          ) : (
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="text"
-                                value=""
-                                onChange={(e) => {
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    blendOrigins: [e.target.value]
-                                  }));
-                                }}
-                                className="flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                placeholder="Origin 1"
-                              />
-                            </div>
-                          )}
-                        </div>
+                        className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                        placeholder={`Origin ${index + 1}`}
+                      />
+                      {formData.blendOrigins.length > 1 && (
                         <button
                           type="button"
                           onClick={() => {
+                            const filtered = formData.blendOrigins.filter((_, i) => i !== index);
                             setFormData(prev => ({
                               ...prev,
-                              blendOrigins: [...(prev.blendOrigins || []), '']
+                              blendOrigins: filtered
                             }));
                           }}
-                          className="mt-2 inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          className="px-4 rounded-xl border border-gray-300 text-sm hover:bg-gray-50"
                         >
-                          Add Origin
+                          Remove
                         </button>
-                      </div>
-                    )}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="roast_level" className="block text-sm font-medium text-gray-700">
-                          Roast Level
-                        </label>
-                        <select
-                          name="roast_level"
-                          id="roast_level"
-                          value={formData.roast_level || BEAN_ROAST_LEVELS.MEDIUM}
-                          onChange={handleChange}
-                          className={`mt-1 block w-full border ${errors.roast_level ? 'border-red-500' : 'border-gray-300'
-                            } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                        >
-                          {roastLevels.map(level => (
-                            <option key={level.value} value={level.value}>
-                              {level.label}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.roast_level && <p className="mt-1 text-sm text-red-600">{errors.roast_level}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="roast_date" className="block text-sm font-medium text-gray-700">
-                          Roast Date
-                        </label>
-                        <input
-                          type="date"
-                          name="roast_date"
-                          id="roast_date"
-                          value={formData.roast_date || ''}
-                          onChange={handleChange}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        />
-                      </div>
+                      )}
                     </div>
+                  ))}
 
-                    <div>
-                      <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-                        Notes
-                      </label>
-                      <textarea
-                        name="notes"
-                        id="notes"
-                        rows="3"
-                        value={formData.notes || ''}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        placeholder="Additional notes about the beans..."
-                      ></textarea>
-                    </div>
-
-
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData(prev => ({
+                        ...prev,
+                        blendOrigins: [...(prev.blendOrigins || []), '']
+                      }))
+                    }
+                    className="text-sm font-medium text-amber-700 hover:text-amber-900"
+                  >
+                    + Add Origin
+                  </button>
                 </div>
+              )}
+            </div>
+
+            {/* Roast Info */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+                Roast Profile
+              </h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <select
+                  name="roast_level"
+                  value={formData.roast_level}
+                  onChange={handleChange}
+                  className="rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                >
+                  {roastLevels.map(level => (
+                    <option key={level.value} value={level.value}>
+                      {level.label}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="date"
+                  name="roast_date"
+                  value={formData.roast_date || ''}
+                  onChange={handleChange}
+                  className="rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                />
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              {errors.submit && (
-                <div className="mb-2 sm:mb-0 sm:mr-2 text-sm text-red-600">{errors.submit}</div>
-              )}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
-              >
-                {loading ? 'Saving...' : (bean ? 'Update Bean' : 'Add Bean')}
-              </button>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              >
-                Cancel
-              </button>
+
+            {/* Notes */}
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                Notes
+              </h3>
+              <textarea
+                name="notes"
+                rows="3"
+                value={formData.notes || ''}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                placeholder="Flavor notes, cupping profile, acidity, body..."
+              />
             </div>
-          </form>
-        </div>
+          </div>
+
+          {/* Footer */}
+          <div className="px-8 py-5 bg-gray-50 border-t flex justify-end space-x-3">
+            {errors.submit && (
+              <p className="text-sm text-red-600 self-center">{errors.submit}</p>
+            )}
+            <button
+              type="button"
+              onClick={handleClose}
+              className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2.5 rounded-xl bg-amber-600 text-white font-medium hover:bg-amber-700 disabled:opacity-50"
+            >
+              {loading ? 'Saving...' : bean ? 'Update Bean' : 'Add Bean'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -41,6 +41,7 @@ export const authAPI = {
   login: (credentials) => api.post('/login', credentials),
   logout: () => api.post('/logout'),
   getCurrentUser: () => api.get('/user'),
+  setupCoffeeShop: (coffeeShopData) => api.post('/user/coffee-shop', coffeeShopData),
 };
 
 // Bean endpoints

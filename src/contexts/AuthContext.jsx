@@ -172,6 +172,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Mandatory first-login coffee shop setup
+  const setupCoffeeShop = async (coffeeShopData) => {
+    try {
+      const response = await authAPI.setupCoffeeShop(coffeeShopData);
+      const updatedUser = response.data.user;
+
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      dispatch({
+        type: 'SET_USER',
+        payload: updatedUser
+      });
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Failed to save coffee shop data';
+      const errorDetails = error.response?.data?.errors || null;
+      return { success: false, error: errorMessage, details: errorDetails };
+    }
+  };
+
   // Logout function
   const logout = async () => {
     try {
@@ -193,6 +214,7 @@ export const AuthProvider = ({ children }) => {
     ...state,
     login,
     register,
+    setupCoffeeShop,
     logout
   };
 

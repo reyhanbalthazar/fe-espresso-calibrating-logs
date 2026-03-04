@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SessionSchema, validateSessionData } from '../../types/session';
-import { beanAPI } from '../../services/api';
-import { grinderAPI } from '../../services/api';
+import { beanAPI, grinderAPI } from '../../services/api';
 
 const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
   const [formData, setFormData] = useState({ ...SessionSchema });
@@ -13,17 +12,11 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
 
   useEffect(() => {
     if (isOpen) {
-      // Fetch beans and grinders when modal opens
       fetchData();
-      
+
       if (session) {
-        // Editing existing session
-        setFormData({
-          ...SessionSchema,
-          ...session
-        });
+        setFormData({ ...SessionSchema, ...session });
       } else {
-        // Creating new session
         setFormData({ ...SessionSchema });
       }
     }
@@ -37,7 +30,7 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
         beanAPI.getAllBeans(),
         grinderAPI.getAllGrinders()
       ]);
-      
+
       setBeans(beansResponse.data.data || beansResponse.data);
       setGrinders(grindersResponse.data.data || grindersResponse.data);
     } catch (error) {
@@ -49,12 +42,12 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    
-    // Clear error for this field when user types
+
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -68,12 +61,11 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
     setLoading(true);
     setErrors({});
 
-    // Validate form data
     const validationErrors = validateSessionData(formData);
+
     if (validationErrors.length > 0) {
       const errorObj = {};
       validationErrors.forEach(error => {
-        // Map generic error messages to field-specific ones
         if (error.includes('Bean')) errorObj.bean_id = error;
         if (error.includes('Grinder')) errorObj.grinder_id = error;
         if (error.includes('session date')) errorObj.session_date = error;
@@ -87,8 +79,7 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
       await onSubmit(formData);
       onClose();
     } catch (error) {
-      console.error('Error submitting session:', error);
-      setErrors({ submit: error.message || 'An error occurred while saving the session.' });
+      setErrors({ submit: error.message || 'Error saving session.' });
     } finally {
       setLoading(false);
     }
@@ -102,136 +93,149 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        {/* Background overlay */}
-        <div 
-          className="fixed inset-0 transition-opacity" 
-          aria-hidden="true"
-          onClick={handleClose}
-        >
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+
+        {/* ===== Header ===== */}
+        <div className="px-6 py-5 border-b border-gray-100">
+          <h3 className="text-xl font-semibold text-gray-900">
+            {session ? 'Edit Calibration Session' : 'New Calibration Session'}
+          </h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Select bean, grinder, and session details
+          </p>
         </div>
 
-        {/* Modal panel */}
-        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <form onSubmit={handleSubmit}>
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    {session ? 'Edit Session' : 'Add New Session'}
-                  </h3>
-                  {isLoadingData ? (
-                    <div className="mt-4 flex justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                    </div>
-                  ) : (
-                    <div className="mt-4 space-y-4">
-                      <div>
-                        <label htmlFor="bean_id" className="block text-sm font-medium text-gray-700">
-                          Bean *
-                        </label>
-                        <select
-                          name="bean_id"
-                          id="bean_id"
-                          value={formData.bean_id || ''}
-                          onChange={handleChange}
-                          className={`mt-1 block w-full border ${
-                            errors.bean_id ? 'border-red-500' : 'border-gray-300'
-                          } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                        >
-                          <option value="">Select a bean</option>
-                          {beans.map(bean => (
-                            <option key={bean.id} value={bean.id}>
-                              {bean.name} - {bean.origin || 'Origin not specified'}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.bean_id && <p className="mt-1 text-sm text-red-600">{errors.bean_id}</p>}
-                      </div>
+        {/* ===== Body ===== */}
+        <form onSubmit={handleSubmit}>
+          <div className="px-6 py-6 space-y-6">
 
-                      <div>
-                        <label htmlFor="grinder_id" className="block text-sm font-medium text-gray-700">
-                          Grinder *
-                        </label>
-                        <select
-                          name="grinder_id"
-                          id="grinder_id"
-                          value={formData.grinder_id || ''}
-                          onChange={handleChange}
-                          className={`mt-1 block w-full border ${
-                            errors.grinder_id ? 'border-red-500' : 'border-gray-300'
-                          } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                        >
-                          <option value="">Select a grinder</option>
-                          {grinders.map(grinder => (
-                            <option key={grinder.id} value={grinder.id}>
-                              {grinder.name} - {grinder.model || 'Model not specified'}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.grinder_id && <p className="mt-1 text-sm text-red-600">{errors.grinder_id}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="session_date" className="block text-sm font-medium text-gray-700">
-                          Session Date *
-                        </label>
-                        <input
-                          type="date"
-                          name="session_date"
-                          id="session_date"
-                          value={formData.session_date || ''}
-                          onChange={handleChange}
-                          className={`mt-1 block w-full border ${
-                            errors.session_date ? 'border-red-500' : 'border-gray-300'
-                          } rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                        />
-                        {errors.session_date && <p className="mt-1 text-sm text-red-600">{errors.session_date}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-                          Notes
-                        </label>
-                        <textarea
-                          name="notes"
-                          id="notes"
-                          rows="3"
-                          value={formData.notes || ''}
-                          onChange={handleChange}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                          placeholder="Session notes..."
-                        ></textarea>
-                      </div>
-                    </div>
-                  )}
-                </div>
+            {isLoadingData ? (
+              <div className="flex justify-center py-10">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-800"></div>
               </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              {errors.submit && (
-                <div className="mb-2 sm:mb-0 sm:mr-2 text-sm text-red-600">{errors.submit}</div>
-              )}
-              <button
-                type="submit"
-                disabled={loading || isLoadingData}
-                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
-              >
-                {loading ? 'Saving...' : (session ? 'Update Session' : 'Add Session')}
-              </button>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+            ) : (
+              <>
+                {/* === Selection Section === */}
+                <div className="space-y-4">
+                  <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                    Equipment & Bean
+                  </h4>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Bean *
+                    </label>
+                    <select
+                      name="bean_id"
+                      value={formData.bean_id || ''}
+                      onChange={handleChange}
+                      className={`w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none ${errors.bean_id ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                    >
+                      <option value="">Select bean</option>
+                      {beans.map(bean => (
+                        <option key={bean.id} value={bean.id}>
+                          {bean.name} — {bean.origin || 'Origin N/A'}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.bean_id && (
+                      <p className="text-xs text-red-600 mt-1">{errors.bean_id}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Grinder *
+                    </label>
+                    <select
+                      name="grinder_id"
+                      value={formData.grinder_id || ''}
+                      onChange={handleChange}
+                      className={`w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none ${errors.grinder_id ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                    >
+                      <option value="">Select grinder</option>
+                      {grinders.map(grinder => (
+                        <option key={grinder.id} value={grinder.id}>
+                          {grinder.name} — {grinder.model || 'Model N/A'}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.grinder_id && (
+                      <p className="text-xs text-red-600 mt-1">{errors.grinder_id}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* === Schedule Section === */}
+                <div className="space-y-4">
+                  <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                    Session Details
+                  </h4>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Session Date *
+                    </label>
+                    <input
+                      type="date"
+                      name="session_date"
+                      value={formData.session_date || ''}
+                      onChange={handleChange}
+                      className={`w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none ${errors.session_date ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                    />
+                    {errors.session_date && (
+                      <p className="text-xs text-red-600 mt-1">{errors.session_date}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* === Notes Section === */}
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">
+                    Notes
+                  </h4>
+                  <textarea
+                    name="notes"
+                    rows="3"
+                    value={formData.notes || ''}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none"
+                    placeholder="Extraction observations, adjustments, taste notes..."
+                  />
+                </div>
+              </>
+            )}
+
+            {errors.submit && (
+              <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                {errors.submit}
+              </div>
+            )}
+          </div>
+
+          {/* ===== Footer ===== */}
+          <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="px-4 py-2 text-sm rounded-lg border border-gray-300 bg-white hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              disabled={loading || isLoadingData}
+              className="px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800 disabled:opacity-50"
+            >
+              {loading ? 'Saving...' : session ? 'Update Session' : 'Create Session'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -73,238 +73,203 @@ const Dashboard = () => {
     })) : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <Header title={`Welcome, ${dashboardData?.user?.name || 'Espresso Professional'}`} />
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-7xl mx-auto px-6 py-8">
 
-        <main className="mt-6 sm:mt-8">
-          {/* Stats Overview */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Beans</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{dashboardData?.counts?.beans || 0}</p>
+        {/* HEADER */}
+        <Header title={`Espresso Calibrator`} />
+
+        {/* METRIC CARDS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          {[
+            { label: 'Beans', value: dashboardData?.counts?.beans || 0 },
+            { label: 'Grinders', value: dashboardData?.counts?.grinders || 0 },
+            { label: 'Sessions', value: dashboardData?.counts?.sessions || 0 },
+            { label: 'Shots', value: dashboardData?.counts?.shots || 0 },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
+            >
+              <p className="text-sm text-gray-500">{item.label}</p>
+              <p className="text-3xl font-semibold text-indigo-600 mt-2">
+                {item.value}
+              </p>
             </div>
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Grinders</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{dashboardData?.counts?.grinders || 0}</p>
-            </div>
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Sessions</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{dashboardData?.counts?.sessions || 0}</p>
-            </div>
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Shots</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{dashboardData?.counts?.shots || 0}</p>
-            </div>
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700">Coffee Shop</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-amber-600">{dashboardData?.user?.coffee_shop_id || 0}</p>
+          ))}
+        </div>
+
+        {/* CHART GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          {/* Monthly Activity */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800 mb-6">
+              Monthly Session Activity
+            </h3>
+
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={
+                    dashboardData?.monthly_activity?.labels &&
+                      dashboardData.monthly_activity.sessions
+                      ? dashboardData.monthly_activity.labels.map(
+                        (label, index) => ({
+                          month: label,
+                          sessions:
+                            dashboardData.monthly_activity.sessions[index] || 0,
+                        })
+                      )
+                      : []
+                  }
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar
+                    dataKey="sessions"
+                    fill="#6366F1"
+                    radius={[8, 8, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
 
-          {/* Taste Profile Insights */}
-          {dashboardData?.taste_profile && dashboardData.taste_profile.common_flavors && dashboardData.taste_profile.common_flavors.length > 0 && (
-            <div className="mb-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-blue-700">
-                    <strong>Taste Profile Insights:</strong> Common flavors detected: {dashboardData.taste_profile.common_flavors.slice(0, 5).join(', ')}
-                  </p>
-                </div>
+          {/* Grinder Usage */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800 mb-6">
+              Grinder Usage
+            </h3>
+
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={
+                    Array.isArray(dashboardData?.grinder_stats)
+                      ? dashboardData.grinder_stats
+                      : []
+                  }
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="grinder_name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar
+                    dataKey="usage_count"
+                    fill="#8B5CF6"
+                    radius={[8, 8, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+        </div>
+
+        {/* SHOT PERFORMANCE CARDS */}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+          {dashboardData?.shot_performance?.averages ? (
+            [
+              {
+                label: 'Avg. Dose',
+                value: `${dashboardData.shot_performance.averages.dose?.toFixed(
+                  2
+                ) || 0} g`,
+              },
+              {
+                label: 'Avg. Yield',
+                value: `${dashboardData.shot_performance.averages.yield?.toFixed(
+                  2
+                ) || 0} g`,
+              },
+              {
+                label: 'Avg. Time',
+                value: `${dashboardData.shot_performance.averages.time?.toFixed(
+                  2
+                ) || 0} sec`,
+              },
+              {
+                label: 'Avg. Temp',
+                value: `${dashboardData.shot_performance.averages.temperature?.toFixed(
+                  0
+                ) || 0}°C`,
+              },
+            ].map((metric, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
+              >
+                <p className="text-sm text-gray-500">{metric.label}</p>
+                <p className="text-xl font-semibold text-gray-900 mt-2">
+                  {metric.value}
+                </p>
               </div>
+            ))
+          ) : (
+            <div className="col-span-4 text-center text-gray-500">
+              No shot performance data available
             </div>
           )}
+        </div>
 
-          {/* Charts Grid - Enhanced Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-            {/* Monthly Activity - Sessions */}
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Monthly Session Activity</h3>
-              <div className="h-64 sm:h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={
-                      dashboardData?.monthly_activity?.labels && dashboardData.monthly_activity.sessions ?
-                      dashboardData.monthly_activity.labels.map((label, index) => ({
-                        month: label,
-                        sessions: dashboardData.monthly_activity.sessions[index] || 0,
-                        shots: dashboardData.monthly_activity.shots[index] || 0
-                      })) : []
-                    }
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="sessions" name="Sessions" fill="#8884d8" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Grinder Usage */}
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Grinder Usage Statistics</h3>
-              <div className="h-64 sm:h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={Array.isArray(dashboardData?.grinder_stats) ? dashboardData.grinder_stats : []}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="grinder_name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="usage_count" name="Usage Count" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Bean Statistics */}
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Bean Session Statistics</h3>
-              <div className="h-64 sm:h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={Array.isArray(dashboardData?.bean_stats) ? dashboardData.bean_stats : []}
-                    margin={{
-                      top: 20,
-                      right: 30,
-                      left: 20,
-                      bottom: 50,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="bean_name" angle={-45} textAnchor="end" height={60} />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="session_count" name="Session Count" fill="#ff7300" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+        {/* RECENT SESSIONS TABLE */}
+        <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800">
+              Recent Calibration Sessions
+            </h3>
           </div>
 
-          {/* Additional Insights Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mt-6 sm:mt-8">
-            {/* Flavor Profile Distribution */}
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Flavor Profile Distribution</h3>
-              <div className="h-64 sm:h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={
-                        dashboardData?.taste_profile?.flavor_categories ?
-                        Object.entries(dashboardData.taste_profile.flavor_categories).map(([name, value]) => ({ name, value })) : []
-                      }
-                      cx="50%"
-                      cy="50%"
-                      labelLine={true}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {Object.keys(dashboardData?.taste_profile?.flavor_categories || {}).map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={`hsl(${index * 72}, 70%, 50%)`} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value) => [value, 'Count']} />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+                <tr>
+                  <th className="px-6 py-3 text-left">Date</th>
+                  <th className="px-6 py-3 text-left">Bean</th>
+                  <th className="px-6 py-3 text-left">Grinder</th>
+                  <th className="px-6 py-3 text-left">Shots</th>
+                </tr>
+              </thead>
 
-            {/* Shot Performance */}
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Shot Performance Metrics</h3>
-              <div className="space-y-4">
-                {dashboardData?.shot_performance?.averages ? (
-                  <>
-                    <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                      <h4 className="font-medium text-amber-800">Avg. Dose</h4>
-                      <p className="text-gray-700">
-                        {(dashboardData.shot_performance.averages.dose || 0).toFixed(2)} g
-                      </p>
-                    </div>
-
-                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                      <h4 className="font-medium text-green-800">Avg. Yield</h4>
-                      <p className="text-gray-700">
-                        {(dashboardData.shot_performance.averages.yield || 0).toFixed(2)} g
-                      </p>
-                    </div>
-
-                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <h4 className="font-medium text-blue-800">Avg. Extraction Time</h4>
-                      <p className="text-gray-700">
-                        {(dashboardData.shot_performance.averages.time || 0).toFixed(2)} sec
-                      </p>
-                    </div>
-
-                    <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                      <h4 className="font-medium text-purple-800">Avg. Temperature</h4>
-                      <p className="text-gray-700">
-                        {(dashboardData.shot_performance.averages.temperature || 0).toFixed(0)}°C
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-gray-500 text-center py-8">No shot performance data available</p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Recent Sessions */}
-          <div className="mt-6 sm:mt-8 bg-white p-4 sm:p-6 rounded-xl shadow-md">
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Recent Calibration Sessions</h3>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bean</th>
-                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grinder</th>
-                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shots</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {Array.isArray(dashboardData?.recent_sessions) ? dashboardData.recent_sessions.slice(0, 10).map((session, index) => (
-                    <tr key={index}>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {session.date ? new Date(session.date).toLocaleDateString() : 'N/A'}
+              <tbody className="divide-y divide-gray-200">
+                {Array.isArray(dashboardData?.recent_sessions) &&
+                  dashboardData.recent_sessions.length > 0 ? (
+                  dashboardData.recent_sessions.slice(0, 10).map((session, i) => (
+                    <tr key={i} className="hover:bg-gray-50 transition">
+                      <td className="px-6 py-4">
+                        {session.date
+                          ? new Date(session.date).toLocaleDateString()
+                          : 'N/A'}
                       </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 font-medium text-gray-900">
                         {session.bean_name}
                       </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4">
                         {session.grinder_name}
                       </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {session.notes}
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4">
                         {session.shots_count}
                       </td>
                     </tr>
-                  )) : <tr><td colSpan="5" className="px-3 sm:px-6 py-4 text-center text-sm text-gray-500">No recent sessions</td></tr>}
-                </tbody>
-              </table>
-            </div>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="px-6 py-6 text-center text-gray-500"
+                    >
+                      No recent sessions
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-        </main>
+        </div>
+
       </div>
     </div>
   );

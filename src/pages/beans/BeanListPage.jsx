@@ -115,307 +115,193 @@ const BeanListPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+
+        {/* KEEPING YOUR HEADER */}
         <Header title="Espresso Calibrator" />
 
-        <div className="py-6 sm:py-8">
-          <div className="mb-6 sm:mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl truncate">
-                  Bean Management
-                </h1>
-                <p className="mt-1 text-sm text-gray-500 hidden sm:block">
-                  Manage your coffee bean inventory and properties
-                </p>
-                <p className="mt-1 text-sm text-gray-500 sm:hidden">
-                  Manage beans
-                </p>
+        <div className="mt-10">
+
+          {/* PAGE TITLE + ACTION */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-10">
+            <div>
+              <h1 className="text-3xl font-semibold text-gray-900">
+                Bean Management
+              </h1>
+              <p className="text-gray-500 mt-2">
+                Manage your coffee bean inventory and properties
+              </p>
+            </div>
+
+            <button
+              onClick={handleAddBean}
+              className="inline-flex items-center px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition shadow-sm"
+            >
+              + Add Bean
+            </button>
+          </div>
+
+          {/* SEARCH + STATS CARD */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+              {/* Search */}
+              <div className="relative w-full lg:max-w-md">
+                <input
+                  type="text"
+                  placeholder="Search beans..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-4 pr-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                />
               </div>
-              <div className="flex justify-end">
-                <button
-                  onClick={handleAddBean}
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5 sm:hidden" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                  </svg>
-                  <span>Add Bean</span>
-                </button>
+
+              {/* Total Count */}
+              <div className="text-sm text-gray-500">
+                Total Beans:
+                <span className="ml-2 text-lg font-semibold text-gray-900">
+                  {filteredBeans.length}
+                </span>
+              </div>
+            </div>
+
+            {/* TABS */}
+            <div className="mt-6 border-b border-gray-200">
+              <div className="flex space-x-8">
+                {['all', 'single-origin', 'blend'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`pb-3 text-sm font-medium border-b-2 transition ${activeTab === tab
+                        ? 'border-indigo-600 text-indigo-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                      }`}
+                  >
+                    {tab === 'all'
+                      ? 'All Beans'
+                      : tab === 'single-origin'
+                        ? 'Single Origin'
+                        : 'Blend'}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Search and filters */}
-          <div className="mb-6">
-            <div className="flex flex-col gap-4">
-              <div className="w-full">
-                <label htmlFor="search" className="sr-only">Search</label>
-                <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    id="search"
-                    className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-4 py-2 border-gray-300 rounded-md"
-                    placeholder="Search beans..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Error message */}
+          {/* ERROR */}
           {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl">
+              {error}
             </div>
           )}
 
-          {/* Loading state */}
+          {/* LOADING */}
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            <div className="flex justify-center py-20">
+              <div className="h-10 w-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
             </div>
+          ) : filteredBeansByTab.length === 0 ? (
+
+            /* EMPTY STATE */
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 py-20 text-center">
+              <h3 className="text-lg font-semibold text-gray-900">
+                No beans found
+              </h3>
+              <p className="text-gray-500 mt-2">
+                Add your first bean to start tracking calibration sessions.
+              </p>
+
+              <button
+                onClick={handleAddBean}
+                className="mt-6 inline-flex px-5 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition"
+              >
+                Add Bean
+              </button>
+            </div>
+
           ) : (
-            <>
-              {/* Stats and Tabs */}
-              <div className="mb-6 bg-white overflow-hidden shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 bg-blue-500 rounded-md p-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                      </svg>
-                    </div>
-                    <div className="ml-4 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">Total Beans</dt>
-                        <dd className="flex items-baseline">
-                          <div className="text-2xl font-semibold text-gray-900">{filteredBeans.length}</div>
-                        </dd>
-                      </dl>
-                    </div>
-                  </div>
 
-                  {/* Tabs */}
-                  <div className="mt-6 border-b border-gray-200">
-                    <nav className="-mb-px flex space-x-8">
-                      <button
-                        onClick={() => setActiveTab('all')}
-                        className={`${
-                          activeTab === 'all'
-                            ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                      >
-                        All Beans
-                      </button>
-                      <button
-                        onClick={() => setActiveTab('single-origin')}
-                        className={`${
-                          activeTab === 'single-origin'
-                            ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                      >
-                        Single Origin
-                      </button>
-                      <button
-                        onClick={() => setActiveTab('blend')}
-                        className={`${
-                          activeTab === 'blend'
-                            ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                      >
-                        Blend
-                      </button>
-                    </nav>
-                  </div>
-                </div>
-              </div>
+            /* TABLE CARD */
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
 
-              {/* Bean list - Table View */}
-              {filteredBeansByTab.length === 0 ? (
-                <div className="text-center py-12">
-                  <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                  </svg>
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">No beans</h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {activeTab === 'all'
-                      ? 'No beans found.'
-                      : activeTab === 'single-origin'
-                        ? 'No single origin beans found.'
-                        : 'No blend beans found.'}
-                  </p>
-                  <div className="mt-6">
-                    <button
-                      onClick={handleAddBean}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                      </svg>
-                      Add Bean
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-                  {/* Desktop/tablet view - horizontal scrolling for small screens */}
-                  <div className="hidden sm:block overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Bean Name
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Origin
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Roast Level
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Type
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredBeansByTab.map(bean => (
-                          <tr key={bean.id} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900 hover:text-blue-600 cursor-pointer underline decoration-dotted"
-                                   onClick={() => navigate(`/beans/${bean.id}/sessions`)}>
-                                {bean.name || bean.bean_name || 'Unnamed Bean'}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {bean.roastery || 'Roastery Unknown'}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">
-                                {bean.origin || 'Origin Unknown'}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">
-                                {bean.roast_level || 'Level Unknown'}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                bean.is_blend ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
-                              }`}>
-                                {bean.is_blend ? 'Blend' : 'Single Origin'}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <div className="flex justify-end space-x-2">
-                                <button
-                                  onClick={() => handleEditBean(bean)}
-                                  className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
-                                  aria-label="Edit bean"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteBean(bean.id)}
-                                  className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
-                                  aria-label="Delete bean"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-gray-50 text-gray-500 uppercase text-xs tracking-wider">
+                    <tr>
+                      <th className="px-6 py-4 text-left">Bean</th>
+                      <th className="px-6 py-4 text-left">Origin</th>
+                      <th className="px-6 py-4 text-left">Roast</th>
+                      <th className="px-6 py-4 text-left">Type</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
 
-                  {/* Mobile view - card layout */}
-                  <div className="sm:hidden">
-                    {filteredBeansByTab.map(bean => (
-                      <div key={bean.id} className="border-b border-gray-200 p-4 bg-white">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-medium text-gray-900 truncate hover:text-blue-600 cursor-pointer underline decoration-dotted"
-                                 onClick={() => navigate(`/beans/${bean.id}/sessions`)}>
-                              {bean.name || bean.bean_name || 'Unnamed Bean'}
-                            </div>
-                            <div className="text-sm text-gray-500 mt-1">
-                              {bean.roastery || 'Roastery Unknown'}
-                            </div>
-                            <div className="text-sm text-gray-900 mt-1">
-                              <span className="font-medium">Origin:</span> {bean.origin || 'Origin Unknown'}
-                            </div>
-                            <div className="text-sm text-gray-900 mt-1">
-                              <span className="font-medium">Roast Level:</span> {bean.roast_level || 'Level Unknown'}
-                            </div>
-                            <div className="text-sm text-gray-900 mt-1">
-                              <span className="font-medium">Type:</span>{' '}
-                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                bean.is_blend ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
-                              }`}>
-                                {bean.is_blend ? 'Blend' : 'Single Origin'}
-                              </span>
-                            </div>
+                  <tbody className="divide-y divide-gray-200">
+                    {filteredBeansByTab.map((bean) => (
+                      <tr
+                        key={bean.id}
+                        className="hover:bg-gray-50 transition"
+                      >
+                        <td className="px-6 py-5">
+                          <div
+                            onClick={() =>
+                              navigate(`/beans/${bean.id}/sessions`)
+                            }
+                            className="font-medium text-gray-900 hover:text-indigo-600 cursor-pointer"
+                          >
+                            {bean.name || bean.bean_name || 'Unnamed Bean'}
                           </div>
-                          <div className="flex space-x-2 ml-4">
+                          <div className="text-gray-500 text-xs mt-1">
+                            {bean.roastery || 'Roastery Unknown'}
+                          </div>
+                        </td>
+
+                        <td className="px-6 py-5">
+                          {bean.origin || 'Unknown'}
+                        </td>
+
+                        <td className="px-6 py-5">
+                          {bean.roast_level || 'Unknown'}
+                        </td>
+
+                        <td className="px-6 py-5">
+                          <span
+                            className={`px-3 py-1 text-xs rounded-full font-medium ${bean.is_blend
+                                ? 'bg-purple-100 text-purple-700'
+                                : 'bg-green-100 text-green-700'
+                              }`}
+                          >
+                            {bean.is_blend ? 'Blend' : 'Single Origin'}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-5 text-right">
+                          <div className="flex justify-end space-x-3">
                             <button
                               onClick={() => handleEditBean(bean)}
-                              className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-50"
-                              aria-label="Edit bean"
+                              className="text-gray-500 hover:text-indigo-600 transition"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                              </svg>
+                              Edit
                             </button>
                             <button
                               onClick={() => handleDeleteBean(bean.id)}
-                              className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-50"
-                              aria-label="Delete bean"
+                              className="text-gray-500 hover:text-red-600 transition"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                              </svg>
+                              Delete
                             </button>
                           </div>
-                        </div>
-                      </div>
+                        </td>
+                      </tr>
                     ))}
-                  </div>
-                </div>
-              )}
-            </>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
           )}
 
-          {/* Form Modal */}
+          {/* MODAL */}
           <BeanFormModal
             isOpen={showFormModal}
             onClose={() => setShowFormModal(false)}

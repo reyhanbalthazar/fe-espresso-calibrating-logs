@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import CoffeeShopSetupModal from './CoffeeShopSetupModal';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, checkingAuthStatus, user } = useAuth();
@@ -22,6 +23,11 @@ const ProtectedRoute = ({ children }) => {
   // Extra guard: authenticated but email not verified should never access app pages
   if (!user?.email_verified_at) {
     return <Navigate to="/login?unverified=true" replace />;
+  }
+
+  // First-login gate: force user to create coffee shop when still null
+  if (!user?.coffee_shop_id) {
+    return <CoffeeShopSetupModal />;
   }
 
   // Return the protected content
