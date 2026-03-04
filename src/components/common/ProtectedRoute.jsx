@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, checkingAuthStatus } = useAuth();
+  const { isAuthenticated, checkingAuthStatus, user } = useAuth();
 
   // Show loading while checking auth status
   if (checkingAuthStatus) {
@@ -17,6 +17,11 @@ const ProtectedRoute = ({ children }) => {
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Extra guard: authenticated but email not verified should never access app pages
+  if (!user?.email_verified_at) {
+    return <Navigate to="/login?unverified=true" replace />;
   }
 
   // Return the protected content

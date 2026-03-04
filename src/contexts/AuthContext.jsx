@@ -10,51 +10,51 @@ const authReducer = (state, action) => {
     case 'LOGIN_START':
       return { ...state, loading: true, error: null };
     case 'LOGIN_SUCCESS':
-      return { 
-        ...state, 
-        loading: false, 
-        isAuthenticated: true, 
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: true,
         user: action.payload.user,
         token: action.payload.token,
-        error: null 
+        error: null
       };
     case 'LOGIN_FAILURE':
-      return { 
-        ...state, 
-        loading: false, 
-        isAuthenticated: false, 
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,
         user: null,
         token: null,
-        error: action.payload 
+        error: action.payload
       };
     case 'REGISTER_START':
       return { ...state, loading: true, error: null };
     case 'REGISTER_SUCCESS':
-      return { 
-        ...state, 
-        loading: false, 
-        isAuthenticated: true, 
-        user: action.payload.user,
-        token: action.payload.token,
-        error: null 
-      };
-    case 'REGISTER_FAILURE':
-      return { 
-        ...state, 
-        loading: false, 
-        isAuthenticated: false, 
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,
         user: null,
         token: null,
-        error: action.payload 
+        error: null
+      };
+    case 'REGISTER_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,
+        user: null,
+        token: null,
+        error: action.payload
       };
     case 'LOGOUT':
-      return { 
-        ...state, 
-        isAuthenticated: false, 
-        user: null, 
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null,
         token: null,
         loading: false,
-        error: null 
+        error: null
       };
     case 'SET_USER':
       return {
@@ -89,18 +89,27 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           dispatch({ type: 'CHECK_AUTH_STATUS_START' });
-          
+
           // Verify token by fetching current user
           const response = await authAPI.getCurrentUser();
-          
+          const currentUser = response.data;
+
+          if (!currentUser?.email_verified_at) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            dispatch({ type: 'LOGOUT' });
+            return;
+          }
+
           dispatch({
             type: 'SET_USER',
-            payload: response.data
+            payload: currentUser
           });
-        } catch (error) {
+        } catch {
           // Token is invalid or expired, remove it
           localStorage.removeItem('authToken');
           localStorage.removeItem('user');
+          dispatch({ type: 'LOGOUT' });
         }
       }
       dispatch({ type: 'CHECK_AUTH_STATUS_COMPLETE' });
@@ -112,14 +121,14 @@ export const AuthProvider = ({ children }) => {
   // Login function
   const login = async (email, password) => {
     dispatch({ type: 'LOGIN_START' });
-    
+
     try {
       const response = await authAPI.login({ email, password });
-      
+
       // Store token and user in localStorage
       localStorage.setItem('authToken', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      
+
       dispatch({
         type: 'LOGIN_SUCCESS',
         payload: {
@@ -127,7 +136,7 @@ export const AuthProvider = ({ children }) => {
           token: response.data.token
         }
       });
-      
+
       return { success: true };
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Login failed';
@@ -139,27 +148,21 @@ export const AuthProvider = ({ children }) => {
   // Register function
   const register = async (name, email, password, passwordConfirmation) => {
     dispatch({ type: 'REGISTER_START' });
-    
+
     try {
-      const response = await authAPI.register({ 
-        name, 
-        email, 
-        password, 
-        password_confirmation: passwordConfirmation 
+      await authAPI.register({
+        name,
+        email,
+        password,
+        password_confirmation: passwordConfirmation
       });
-      
-      // Store token and user in localStorage
-      localStorage.setItem('authToken', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      dispatch({
-        type: 'REGISTER_SUCCESS',
-        payload: {
-          user: response.data.user,
-          token: response.data.token
-        }
-      });
-      
+
+      // Ensure user stays logged out until email is verified and login succeeds
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+
+      dispatch({ type: 'REGISTER_SUCCESS' });
+
       return { success: true };
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Registration failed';
@@ -177,11 +180,11 @@ export const AuthProvider = ({ children }) => {
       // Even if logout fails on the server, we should still clear local data
       console.error('Logout error:', error);
     }
-    
+
     // Clear local storage
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
-    
+
     dispatch({ type: 'LOGOUT' });
   };
 

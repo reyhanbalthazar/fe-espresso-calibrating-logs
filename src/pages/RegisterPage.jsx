@@ -64,7 +64,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <Header title="Espresso Calibrator" />
+        {/* <Header title="Espresso Calibrator" /> */}
 
         <div className="flex items-center justify-center p-4">
           <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-sm sm:max-w-md mx-auto">
@@ -174,8 +174,8 @@ const RegisterPage = () => {
                 disabled={loading}
                 className={`w-full py-3 px-4 rounded-lg text-white font-medium ${
                   loading
-                    ? 'bg-amber-400 cursor-not-allowed'
-                    : 'bg-amber-600 hover:bg-amber-700 active:bg-amber-800'
+                    ? 'bg-blue-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
                 } transition-colors duration-200`}
               >
                 {loading ? 'Creating Account...' : 'Register'}
@@ -204,7 +204,7 @@ const RegisterPage = () => {
 
             <h3 className="text-xl font-semibold text-gray-800 mb-2">Registration Successful!</h3>
             <p className="text-gray-600 mb-4">
-              Your account has been created successfully. You will be redirected to the login page in {countdown} seconds.
+              Your account has been created. Please verify your email first, then log in. You will be redirected to the login page in {countdown} seconds.
             </p>
 
             <button
