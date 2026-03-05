@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Header = ({ title = 'Espresso Calibrator' }) => {
+const Header = ({ title = 'KALYBRATE' }) => {
   const { user, logout, isAuthenticated } = useAuth();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
