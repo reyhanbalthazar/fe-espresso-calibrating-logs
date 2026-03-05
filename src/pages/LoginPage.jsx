@@ -4,17 +4,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { loginValidationSchema } from '../utils/validation';
+import { authAPI } from '../services/api';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [loginSuccessMessage, setLoginSuccessMessage] = useState('');
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMessage, setResendMessage] = useState('');
+  const [resendError, setResendError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(loginValidationSchema),
@@ -32,6 +37,8 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     setError('');
+    setResendMessage('');
+    setResendError('');
 
     try {
       const result = await login(data.email, data.password);
@@ -45,6 +52,32 @@ const LoginPage = () => {
       setError('An unexpected error occurred during login');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const showResendLink = error.toLowerCase().includes('verify your email');
+
+  const handleResendVerification = async () => {
+    const email = getValues('email')?.trim();
+    if (!email) {
+      setResendError('Please fill your email first.');
+      return;
+    }
+
+    setResendLoading(true);
+    setResendMessage('');
+    setResendError('');
+    try {
+      const response = await authAPI.resendVerificationEmail(email);
+      const message =
+        response?.data?.message || 'Verification email has been sent. Please check your inbox.';
+      setResendMessage(message);
+    } catch (err) {
+      setResendError(
+        err?.response?.data?.message || 'Failed to resend verification email.'
+      );
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -87,6 +120,28 @@ const LoginPage = () => {
           {error && (
             <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
               {error}
+              {showResendLink && (
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={handleResendVerification}
+                    disabled={resendLoading}
+                    className="font-semibold underline hover:no-underline disabled:opacity-60"
+                  >
+                    {resendLoading ? 'Sending...' : 'Resend Email Verification'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          {resendMessage && (
+            <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
+              {resendMessage}
+            </div>
+          )}
+          {resendError && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+              {resendError}
             </div>
           )}
 

@@ -42,6 +42,25 @@ export const authAPI = {
   logout: () => api.post('/logout'),
   getCurrentUser: () => api.get('/user'),
   setupCoffeeShop: (coffeeShopData) => api.post('/user/coffee-shop', coffeeShopData),
+  resendVerificationEmail: async (email) => {
+    const payload = { email };
+    const endpoints = [
+      '/email/verification-notification',
+      '/email/resend',
+      '/resend-verification-email',
+    ];
+
+    let lastError;
+    for (const endpoint of endpoints) {
+      try {
+        return await api.post(endpoint, payload);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError;
+  },
 };
 
 // Bean endpoints
