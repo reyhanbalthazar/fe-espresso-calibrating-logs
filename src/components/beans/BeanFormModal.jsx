@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BeanSchema, BEAN_ROAST_LEVELS, validateBeanData } from '../../types/bean';
+import { COFFEE_ORIGIN_GROUPS, normalizeCoffeeOrigin } from '../../constants/coffeeOrigins';
 
 const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
   const [formData, setFormData] = useState({ ...BeanSchema });
@@ -13,10 +14,16 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
 
       // If it's a blend, split the origin by commas and populate blendOrigins
       if (bean.is_blend && bean.origin) {
-        updatedBean.blendOrigins = bean.origin.split(', ').map(origin => origin.trim());
+        const normalizedOrigins = bean.origin
+          .split(',')
+          .map((origin) => normalizeCoffeeOrigin(origin))
+          .filter(Boolean);
+        updatedBean.blendOrigins = normalizedOrigins.length > 0 ? normalizedOrigins : [''];
       } else if (bean.is_blend && !bean.origin) {
         // If it's a blend but no origin, initialize with empty array
         updatedBean.blendOrigins = [''];
+      } else if (!bean.is_blend) {
+        updatedBean.origin = normalizeCoffeeOrigin(bean.origin);
       }
 
       setFormData({
@@ -39,17 +46,22 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
       setFormData(prev => {
         if (isBlend && !prev.blendOrigins) {
           // Switching to blend: convert existing origin to blendOrigins array
+          const normalized = normalizeCoffeeOrigin(prev.origin);
           return {
             ...prev,
             is_blend: isBlend,
-            blendOrigins: prev.origin ? prev.origin.split(', ').map(origin => origin.trim()) : ['']
+            blendOrigins: normalized ? [normalized] : ['']
           };
         } else if (!isBlend) {
           // Switching to single origin: combine blendOrigins into origin string
+          const uniqueOrigins = [...new Set((prev.blendOrigins || [])
+            .map((origin) => normalizeCoffeeOrigin(origin))
+            .filter(Boolean))]
+            .sort((a, b) => a.localeCompare(b));
           return {
             ...prev,
             is_blend: isBlend,
-            origin: prev.blendOrigins ? prev.blendOrigins.filter(origin => origin.trim() !== '').join(', ') : prev.origin,
+            origin: uniqueOrigins[0] || '',
             blendOrigins: []
           };
         }
@@ -109,7 +121,13 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
 
     // If it's a blend, combine the blendOrigins into a comma-separated origin string
     if (formData.is_blend && formData.blendOrigins && Array.isArray(formData.blendOrigins)) {
-      submitData.origin = formData.blendOrigins.filter(origin => origin.trim() !== '').join(', ');
+      submitData.origin = [...new Set(formData.blendOrigins
+        .map((origin) => normalizeCoffeeOrigin(origin))
+        .filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b))
+        .join(', ');
+    } else {
+      submitData.origin = normalizeCoffeeOrigin(formData.origin);
     }
 
     // Validate form data
@@ -270,20 +288,28 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
               </h3>
 
               {!formData.is_blend ? (
-                <input
-                  type="text"
+                <select
                   name="origin"
                   value={formData.origin || ''}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                  placeholder="Ethiopia, Colombia, Brazil..."
-                />
+                >
+                  <option value="">Select origin</option>
+                  {COFFEE_ORIGIN_GROUPS.map((group) => (
+                    <optgroup key={group.region} label={group.region}>
+                      {group.producers.map((producer) => (
+                        <option key={producer} value={producer}>
+                          {producer}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
               ) : (
                 <div className="space-y-3">
                   {formData.blendOrigins?.map((origin, index) => (
                     <div key={index} className="flex space-x-2">
-                      <input
-                        type="text"
+                      <select
                         value={origin}
                         onChange={(e) => {
                           const newOrigins = [...formData.blendOrigins];
@@ -294,8 +320,18 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
                           }));
                         }}
                         className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                        placeholder={`Origin ${index + 1}`}
-                      />
+                      >
+                        <option value="">Select origin {index + 1}</option>
+                        {COFFEE_ORIGIN_GROUPS.map((group) => (
+                          <optgroup key={`${group.region}-${index}`} label={group.region}>
+                            {group.producers.map((producer) => (
+                              <option key={producer} value={producer}>
+                                {producer}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </select>
                       {formData.blendOrigins.length > 1 && (
                         <button
                           type="button"

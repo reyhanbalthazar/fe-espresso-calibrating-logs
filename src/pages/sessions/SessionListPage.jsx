@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sessionAPI, beanAPI, grinderAPI, shotAPI } from '../../services/api';
+import { sessionAPI } from '../../services/api';
 import SessionFormModal from '../../components/sessions/SessionFormModal';
 import ShotList from '../../components/sessions/ShotList';
 import { useAuth } from '../../contexts/AuthContext';
@@ -8,10 +8,7 @@ import Header from '../../components/common/Header';
 
 const SessionListPage = () => {
   const [sessions, setSessions] = useState([]);
-  const [beans, setBeans] = useState([]);
-  const [grinders, setGrinders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [dataLoading, setDataLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFormModal, setShowFormModal] = useState(false);
@@ -65,60 +62,20 @@ const SessionListPage = () => {
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      setDataLoading(true);
+      const sessionsResponse = await sessionAPI.getAllSessions();
+      const payload = sessionsResponse?.data;
+      const sessionsData = Array.isArray(payload?.data)
+        ? payload.data
+        : Array.isArray(payload)
+          ? payload
+          : [];
 
-      // Fetch sessions, beans, and grinders in parallel
-      const [sessionsResponse, beansResponse, grindersResponse] = await Promise.all([
-        sessionAPI.getAllSessions(),
-        beanAPI.getAllBeans(),
-        grinderAPI.getAllGrinders()
-      ]);
-
-      console.log('Beans API response:', beansResponse);
-      console.log('Beans data:', beansResponse.data);
-
-      // Handle different response structures
-      let sessionsData = sessionsResponse.data;
-      let beansData = beansResponse.data;
-      let grindersData = grindersResponse.data;
-
-      // Check if data is nested in a data property
-      if (sessionsResponse.data && sessionsResponse.data.data) {
-        sessionsData = sessionsResponse.data.data;
-      }
-      if (beansResponse.data && beansResponse.data.data) {
-        beansData = beansResponse.data.data;
-      }
-      if (grindersResponse.data && grindersResponse.data.data) {
-        grindersData = grindersResponse.data.data;
-      }
-
-      console.log('Processed beans data:', beansData);
-      console.log('First bean item:', beansData[0]);
-
-      // Enrich sessions with bean and grinder data
-      const enrichedSessions = sessionsData.map(session => {
-        const bean = beansData.find(b => b.id === session.bean_id);
-        const grinder = grindersData.find(g => g.id === session.grinder_id);
-
-        return {
-          ...session,
-          bean,  // Attach the full bean object
-          grinder  // Attach the full grinder object
-        };
-      });
-
-      console.log('Enriched sessions:', enrichedSessions);
-
-      setSessions(enrichedSessions || []);
-      setBeans(beansData || []);
-      setGrinders(grindersData || []);
+      setSessions(sessionsData);
     } catch (err) {
       setError(err.message || 'Failed to load data');
       console.error('Error fetching data:', err);
     } finally {
       setLoading(false);
-      setDataLoading(false);
     }
   };
 
@@ -136,55 +93,7 @@ const SessionListPage = () => {
         // Create new session
         response = await sessionAPI.createSession(sessionData);
         const newSession = response.data.data || response.data;
-
-        console.log('New session created:', newSession);
-
-        // Create an enriched session with bean and grinder data
-        // First, try to find the bean and grinder from our existing state
-        const existingBean = beans.find(b => b.id === newSession.bean_id);
-        const existingGrinder = grinders.find(g => g.id === newSession.grinder_id);
-
-        console.log('Found existing bean:', existingBean);
-        console.log('Found existing grinder:', existingGrinder);
-
-        let beanData = existingBean;
-        let grinderData = existingGrinder;
-
-        // If we don't have it in existing state, fetch it
-        if (!beanData) {
-          console.log('Fetching bean data...');
-          try {
-            const beanResponse = await beanAPI.getBeanById(newSession.bean_id);
-            console.log('Bean API response:', beanResponse);
-            beanData = beanResponse.data.data || beanResponse.data || beanResponse;
-            console.log('Extracted bean data:', beanData);
-          } catch (err) {
-            console.error('Error fetching bean:', err);
-          }
-        }
-
-        if (!grinderData) {
-          console.log('Fetching grinder data...');
-          try {
-            const grinderResponse = await grinderAPI.getGrinderById(newSession.grinder_id);
-            console.log('Grinder API response:', grinderResponse);
-            grinderData = grinderResponse.data.data || grinderResponse.data || grinderResponse;
-            console.log('Extracted grinder data:', grinderData);
-          } catch (err) {
-            console.error('Error fetching grinder:', err);
-          }
-        }
-
-        const enrichedNewSession = {
-          ...newSession,
-          bean: beanData,  // Use 'bean' instead of 'bean_data' for consistency
-          grinder: grinderData  // Use 'grinder' instead of 'grinder_data'
-        };
-
-        console.log('Enriched session to be added:', enrichedNewSession);
-
-        // Add the enriched session to the list
-        setSessions(prevSessions => [enrichedNewSession, ...prevSessions]);
+        setSessions(prevSessions => [newSession, ...prevSessions]);
       }
 
       setShowFormModal(false);
@@ -219,12 +128,12 @@ const SessionListPage = () => {
 
       // Search term filtering
       const searchTermLower = searchTerm.toLowerCase();
-      const bean = beans.find(b => b.id === session.bean_id);
-      const grinder = grinders.find(g => g.id === session.grinder_id);
+      const bean = session.bean || session.bean_data;
+      const grinder = session.grinder || session.grinder_data;
 
       const searchMatch = !searchTerm ||
-        (bean && bean.name.toLowerCase().includes(searchTermLower)) ||
-        (grinder && grinder.name.toLowerCase().includes(searchTermLower)) ||
+        (bean?.name && bean.name.toLowerCase().includes(searchTermLower)) ||
+        (grinder?.name && grinder.name.toLowerCase().includes(searchTermLower)) ||
         (session.session_date && session.session_date.toLowerCase().includes(searchTermLower)) ||
         (session.notes && session.notes.toLowerCase().includes(searchTermLower));
 
@@ -237,7 +146,7 @@ const SessionListPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100 overflow-x-hidden">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Header title="Espresso Calibrator" />
 
@@ -258,7 +167,7 @@ const SessionListPage = () => {
               <div className="flex justify-end">
                 <button
                   onClick={handleAddSession}
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5 sm:hidden" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
@@ -292,8 +201,8 @@ const SessionListPage = () => {
               </div>
 
               {/* Date range filter */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
+                <div className="min-w-0">
                   <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">
                     Start Date
                   </label>
@@ -305,7 +214,7 @@ const SessionListPage = () => {
                     onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
                   />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">
                     End Date
                   </label>
@@ -360,7 +269,7 @@ const SessionListPage = () => {
               <div className="mb-6 bg-white overflow-hidden shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0 text-white bg-gradient-to-r from-indigo-500 to-purple-600  rounded-md p-3">
+                    <div className="flex-shrink-0 bg-blue-500 rounded-md p-3">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -390,7 +299,7 @@ const SessionListPage = () => {
                   <div className="mt-6">
                     <button
                       onClick={handleAddSession}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 010 2h-3v3a1 1 0 01-2 0v-3H6a1 1 0 010-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
@@ -422,15 +331,8 @@ const SessionListPage = () => {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {filteredSessions.map(session => {
-                          // Check for both naming conventions
-                          const bean = session.bean || session.bean_data || beans.find(b => b.id === session.bean_id);
-                          const grinder = session.grinder || session.grinder_data || grinders.find(g => g.id === session.grinder_id);
-
-                          console.log('Session ID:', session.id);
-                          console.log('Session bean_id:', session.bean_id);
-                          console.log('Found bean:', bean);
-                          console.log('Bean name:', bean?.name);
-                          console.log('All beans in state:', beans);
+                          const bean = session.bean || session.bean_data;
+                          const grinder = session.grinder || session.grinder_data;
 
                           return (
                             <Fragment key={session.id}>
@@ -453,7 +355,7 @@ const SessionListPage = () => {
                                   </div>
                                   <div className="text-sm text-gray-500">
                                     {grinder && typeof grinder === 'object' && grinder.name
-                                      ? grinder.name
+                                      ? grinder.name + ' (' + grinder.model + ')'
                                       : 'Unknown Grinder'}
                                   </div>
                                 </td>
@@ -544,9 +446,8 @@ const SessionListPage = () => {
                   {/* Mobile view - card layout */}
                   <div className="sm:hidden">
                     {filteredSessions.map(session => {
-                      // Check for both naming conventions
-                      const bean = session.bean || session.bean_data || beans.find(b => b.id === session.bean_id);
-                      const grinder = session.grinder || session.grinder_data || grinders.find(g => g.id === session.grinder_id);
+                      const bean = session.bean || session.bean_data;
+                      const grinder = session.grinder || session.grinder_data;
 
                       return (
                         <div key={session.id} className="border-b border-gray-200 p-4 bg-white">
@@ -637,6 +538,7 @@ const SessionListPage = () => {
                                   ? 'max-h-[1000px] opacity-100 mt-4 pt-4 border-t border-gray-100'
                                   : 'max-h-0 opacity-0'
                               }`}
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <div className="pt-4 border-t border-gray-100">
                                 <ShotList sessionId={session.id} sessionDate={session.session_date} />

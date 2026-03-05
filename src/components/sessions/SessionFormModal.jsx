@@ -184,7 +184,7 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
                       name="session_date"
                       value={formData.session_date || ''}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none ${errors.session_date ? 'border-red-500' : 'border-gray-300'
+                      className={`block w-full max-w-full min-w-0 rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none ${errors.session_date ? 'border-red-500' : 'border-gray-300'
                         }`}
                     />
                     {errors.session_date && (

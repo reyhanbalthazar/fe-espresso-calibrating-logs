@@ -25,10 +25,11 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
 
   const getNextAvailableShotNumber = (existingShots) => {
     if (!existingShots?.length) return 1;
-    const numbers = existingShots.map(s => s.shot_number);
-    let i = 1;
-    while (numbers.includes(i)) i++;
-    return i;
+    const numbers = existingShots
+      .map((s) => Number(s.shot_number))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    if (!numbers.length) return 1;
+    return Math.max(...numbers) + 1;
   };
 
   const handleChange = (e) => {
@@ -71,7 +72,7 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
       return;
     }
 
-    if (!shot && existingShots?.some(s => s.shot_number === formData.shot_number)) {
+    if (!shot && existingShots?.some((s) => Number(s.shot_number) === Number(formData.shot_number))) {
       setErrors({ shot_number: `Shot number ${formData.shot_number} already exists.` });
       setLoading(false);
       return;
@@ -95,8 +96,8 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col">
 
         {/* Header */}
         <div className="px-6 py-5 border-b bg-gradient-to-r from-gray-50 to-white">
@@ -108,8 +109,8 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
           </p>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-1 min-h-0 flex-col">
+          <div className="p-5 sm:p-6 space-y-8 flex-1 min-h-0 overflow-y-auto">
 
             {/* Shot Info */}
             <section>
@@ -249,7 +250,7 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-3">
+          <div className="px-5 sm:px-6 py-4 border-t bg-gray-50 flex justify-end space-x-3">
             <button
               type="button"
               onClick={handleClose}
