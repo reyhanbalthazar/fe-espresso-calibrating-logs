@@ -67,7 +67,7 @@ const RegisterPage = () => {
       {/* LEFT PANEL */}
       <div className="hidden md:flex w-1/2 bg-[#DCD6F7] relative p-16">
         <div className="absolute top-10 left-12 text-3xl font-bold text-indigo-600">
-          droip
+          kalyb
         </div>
 
         <div className="mt-auto mb-20">

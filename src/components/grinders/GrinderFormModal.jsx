@@ -185,7 +185,7 @@ const GrinderFormModal = ({ isOpen, onClose, grinder, onSubmit }) => {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl bg-amber-600 text-white font-medium hover:bg-amber-700 disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600 font-medium hover:opacity-90 disabled:opacity-50"
             >
               {loading ? 'Saving...' : grinder ? 'Update Grinder' : 'Add Grinder'}
             </button>

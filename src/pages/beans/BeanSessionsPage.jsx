@@ -45,8 +45,8 @@ const BeanSessionsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <Header title="Espresso Calibrator" />
 
           <div className="mt-10 bg-white rounded-2xl border border-gray-200 shadow-sm p-16 flex flex-col items-center justify-center">
@@ -62,8 +62,8 @@ const BeanSessionsPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <Header title="Espresso Calibrator" />
 
           <div className="mt-10 bg-white rounded-2xl border border-red-200 shadow-sm p-10">
@@ -108,11 +108,11 @@ const BeanSessionsPage = () => {
   const beanInfo = sessions.length > 0 ? sessions[0].bean : null;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Header title="Espresso Calibrator" />
 
-        <div className="mt-10">
+        <div className="py-6 sm:py-8">
 
           {/* PAGE HEADER */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-10">

@@ -158,7 +158,7 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
   }));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -166,9 +166,9 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+      <div className="relative my-auto w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col">
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex flex-1 min-h-0 flex-col">
 
           {/* Header */}
           <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center">
@@ -190,7 +190,7 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
           </div>
 
           {/* Body */}
-          <div className="px-8 py-6 space-y-8 max-h-[70vh] overflow-y-auto">
+          <div className="px-5 sm:px-8 py-6 space-y-8 flex-1 min-h-0 overflow-y-auto">
 
             {/* Basic Info */}
             <div className="space-y-4">
@@ -377,7 +377,7 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
           </div>
 
           {/* Footer */}
-          <div className="px-8 py-5 bg-gray-50 border-t flex justify-end space-x-3">
+          <div className="px-5 sm:px-8 py-5 bg-gray-50 border-t flex justify-end space-x-3">
             {errors.submit && (
               <p className="text-sm text-red-600 self-center">{errors.submit}</p>
             )}
@@ -391,7 +391,7 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl bg-amber-600 text-white font-medium hover:bg-amber-700 disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600 font-medium hover:opacity-90 disabled:opacity-50"
             >
               {loading ? 'Saving...' : bean ? 'Update Bean' : 'Add Bean'}
             </button>

@@ -230,7 +230,7 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
             <button
               type="submit"
               disabled={loading || isLoadingData}
-              className="px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800 disabled:opacity-50"
+              className="px-4 py-2 text-sm rounded-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 disabled:opacity-50"
             >
               {loading ? 'Saving...' : session ? 'Update Session' : 'Create Session'}
             </button>

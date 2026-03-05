@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .bg-brand-gradient {
+    @apply bg-gradient-to-r from-indigo-500 to-purple-600;
+  }
+
+  .bg-brand-gradient-diagonal {
+    @apply bg-gradient-to-br from-indigo-500 to-purple-600;
+  }
+}

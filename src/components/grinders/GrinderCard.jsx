@@ -39,13 +39,6 @@ const GrinderCard = ({ grinder, onEdit, onDelete }) => {
         </div>
       </div>
 
-      {/* Equipment Tag */}
-      <div className="mt-4">
-        <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-          Espresso Grinder
-        </span>
-      </div>
-
       {/* Notes */}
       {grinder.notes && (
         <div className="mt-5 pt-4 border-t border-gray-100">

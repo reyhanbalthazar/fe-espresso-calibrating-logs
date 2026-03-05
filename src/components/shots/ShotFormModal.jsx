@@ -260,7 +260,7 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:opacity-50"
+              className="px-5 py-2 rounded-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium hover:opacity-90 transition disabled:opacity-50"
             >
               {loading ? 'Saving...' : (shot ? 'Update Shot' : 'Add Shot')}
             </button>

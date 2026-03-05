@@ -115,13 +115,13 @@ const BeanListPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
 
         {/* KEEPING YOUR HEADER */}
         <Header title="Espresso Calibrator" />
 
-        <div className="mt-10">
+        <div className="py-6 sm:py-8">
 
           {/* PAGE TITLE + ACTION */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-10">
@@ -136,7 +136,7 @@ const BeanListPage = () => {
 
             <button
               onClick={handleAddBean}
-              className="inline-flex items-center px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition shadow-sm"
+              className="inline-flex items-center px-5 py-2.5 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600 font-medium hover:opacity-90 transition shadow-sm"
             >
               + Add Bean
             </button>
@@ -174,8 +174,8 @@ const BeanListPage = () => {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`pb-3 text-sm font-medium border-b-2 transition ${activeTab === tab
-                        ? 'border-indigo-600 text-indigo-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? 'border-indigo-600 text-indigo-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
                       }`}
                   >
                     {tab === 'all'
@@ -214,7 +214,7 @@ const BeanListPage = () => {
 
               <button
                 onClick={handleAddBean}
-                className="mt-6 inline-flex px-5 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                className="mt-6 inline-flex px-5 py-2.5 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 transition"
               >
                 Add Bean
               </button>
@@ -268,8 +268,8 @@ const BeanListPage = () => {
                         <td className="px-6 py-5">
                           <span
                             className={`px-3 py-1 text-xs rounded-full font-medium ${bean.is_blend
-                                ? 'bg-purple-100 text-purple-700'
-                                : 'bg-green-100 text-green-700'
+                              ? 'bg-purple-100 text-purple-700'
+                              : 'bg-green-100 text-green-700'
                               }`}
                           >
                             {bean.is_blend ? 'Blend' : 'Single Origin'}

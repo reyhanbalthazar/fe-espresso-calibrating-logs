@@ -73,14 +73,15 @@ const Dashboard = () => {
     })) : [];
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
 
         {/* HEADER */}
         <Header title={`Espresso Calibrator`} />
 
-        {/* METRIC CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div className="py-6 sm:py-8">
+          {/* METRIC CARDS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {[
             { label: 'Beans', value: dashboardData?.counts?.beans || 0 },
             { label: 'Grinders', value: dashboardData?.counts?.grinders || 0 },
@@ -99,8 +100,8 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* CHART GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* CHART GRID */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
           {/* Monthly Activity */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
@@ -167,10 +168,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-        </div>
+          </div>
 
-        {/* SHOT PERFORMANCE CARDS */}
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* SHOT PERFORMANCE CARDS */}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
           {dashboardData?.shot_performance?.averages ? (
             [
               {
@@ -213,63 +214,63 @@ const Dashboard = () => {
               No shot performance data available
             </div>
           )}
-        </div>
-
-        {/* RECENT SESSIONS TABLE */}
-        <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="px-6 py-5 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Recent Calibration Sessions
-            </h3>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                <tr>
-                  <th className="px-6 py-3 text-left">Date</th>
-                  <th className="px-6 py-3 text-left">Bean</th>
-                  <th className="px-6 py-3 text-left">Grinder</th>
-                  <th className="px-6 py-3 text-left">Shots</th>
-                </tr>
-              </thead>
+          {/* RECENT SESSIONS TABLE */}
+          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Recent Calibration Sessions
+              </h3>
+            </div>
 
-              <tbody className="divide-y divide-gray-200">
-                {Array.isArray(dashboardData?.recent_sessions) &&
-                  dashboardData.recent_sessions.length > 0 ? (
-                  dashboardData.recent_sessions.slice(0, 10).map((session, i) => (
-                    <tr key={i} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-4">
-                        {session.date
-                          ? new Date(session.date).toLocaleDateString()
-                          : 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 font-medium text-gray-900">
-                        {session.bean_name}
-                      </td>
-                      <td className="px-6 py-4">
-                        {session.grinder_name}
-                      </td>
-                      <td className="px-6 py-4">
-                        {session.shots_count}
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+                  <tr>
+                    <th className="px-6 py-3 text-left">Date</th>
+                    <th className="px-6 py-3 text-left">Bean</th>
+                    <th className="px-6 py-3 text-left">Grinder</th>
+                    <th className="px-6 py-3 text-left">Shots</th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-200">
+                  {Array.isArray(dashboardData?.recent_sessions) &&
+                    dashboardData.recent_sessions.length > 0 ? (
+                    dashboardData.recent_sessions.slice(0, 10).map((session, i) => (
+                      <tr key={i} className="hover:bg-gray-50 transition">
+                        <td className="px-6 py-4">
+                          {session.date
+                            ? new Date(session.date).toLocaleDateString()
+                            : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 font-medium text-gray-900">
+                          {session.bean_name}
+                        </td>
+                        <td className="px-6 py-4">
+                          {session.grinder_name}
+                        </td>
+                        <td className="px-6 py-4">
+                          {session.shots_count}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="px-6 py-6 text-center text-gray-500"
+                      >
+                        No recent sessions
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      className="px-6 py-6 text-center text-gray-500"
-                    >
-                      No recent sessions
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );
