@@ -5,6 +5,9 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
   const [formData, setFormData] = useState({ ...ShotSchema });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [aiSuggestion, setAiSuggestion] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
 
   useEffect(() => {
     if (isOpen && shot) {
@@ -21,6 +24,8 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
       });
     }
     setErrors({});
+    setAiSuggestion('');
+    setAiError('');
   }, [isOpen, shot, sessionId, existingShots]);
 
   const getNextAvailableShotNumber = (existingShots) => {
@@ -90,7 +95,64 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
 
   const handleClose = () => {
     setErrors({});
+    setAiSuggestion('');
+    setAiError('');
     onClose();
+  };
+
+  const handleGenerateAiSuggestion = async () => {
+    const promptInput = (formData.taste_notes || '').trim();
+    if (!promptInput) {
+      setAiError('Please fill Taste Notes first.');
+      setAiSuggestion('');
+      return;
+    }
+
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) {
+      setAiError('VITE_GEMINI_API_KEY is not set.');
+      setAiSuggestion('');
+      return;
+    }
+
+    setAiLoading(true);
+    setAiError('');
+
+    try {
+      const prompt = `You are a barista coach. Based on this shot data:
+          - Taste notes: ${promptInput}
+          - Dose: ${formData.dose || '-'} g
+          - Yield: ${formData.yield || '-'} g
+          - Time: ${formData.time_seconds || '-'} s
+          - Water temp: ${formData.water_temperature || '-'} C
+
+          Give short practical calibration advice in 2-4 bullet points.`;
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        }
+      );
+
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!response.ok || !text) {
+        throw new Error(data?.error?.message || 'Failed to generate AI suggestion.');
+      }
+
+      setAiSuggestion(text);
+    } catch (err) {
+      setAiSuggestion('');
+      setAiError(err.message || 'Failed to generate AI suggestion.');
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -215,7 +277,7 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
               <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wide mb-4">
                 Evaluation
               </h3>
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-6">
                 <div>
                   <label className="form-label">Taste Notes</label>
                   <textarea
@@ -226,6 +288,46 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
                     className="form-input resize-none"
                     placeholder="Flavor balance, acidity, body, defects..."
                   />
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      onClick={handleGenerateAiSuggestion}
+                      disabled={aiLoading}
+                      className="inline-flex items-center px-3 py-2 rounded-lg text-sm bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition disabled:opacity-50"
+                    >
+                      {aiLoading ? 'Thinking...' : 'Get AI Suggestion'}
+                    </button>
+                    <p className="mt-2 text-xs text-gray-500">
+                      Generate suggestion from Taste Notes before filling Action Taken.
+                    </p>
+                  </div>
+                  {aiError && (
+                    <p className="mt-2 text-xs text-red-600">{aiError}</p>
+                  )}
+                  {aiSuggestion && (
+                    <div className="mt-3 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2">
+                      <p className="text-xs font-semibold text-indigo-700 uppercase tracking-wide mb-1">
+                        AI Suggestion
+                      </p>
+                      <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                        {aiSuggestion}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            action_taken: prev.action_taken
+                              ? `${prev.action_taken}\n${aiSuggestion}`
+                              : aiSuggestion
+                          }))
+                        }
+                        className="mt-3 px-3 py-2 rounded-lg text-sm border border-indigo-300 text-indigo-700 bg-white hover:bg-indigo-50 transition"
+                      >
+                        Use Suggestion in Action Taken
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div>
