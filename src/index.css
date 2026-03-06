@@ -10,4 +10,20 @@
   .bg-brand-gradient-diagonal {
     @apply bg-gradient-to-br from-indigo-500 to-purple-600;
   }
+
+  .login-page-bg {
+    background-color: #eef2ff;
+    background-image:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(238, 242, 255, 0.82)),
+      url('./assets/background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+
+  @media (min-width: 768px) {
+    .login-page-bg {
+      background-attachment: fixed;
+    }
+  }
 }

@@ -82,9 +82,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="login-page-bg min-h-screen flex">
       {/* LEFT PANEL */}
-      <div className="hidden md:flex w-1/2 bg-[#DCD6F7] relative p-16">
+      <div className="hidden md:flex w-1/2 relative p-16">
         <div className="absolute top-10 left-12 text-3xl font-bold text-indigo-600">
           KALYBRATE
         </div>
@@ -104,8 +104,8 @@ const LoginPage = () => {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50 px-6">
-        <div className="w-full max-w-md">
+      <div className="flex w-full md:w-1/2 items-center justify-center px-6 py-10 md:px-10">
+        <div className="w-full max-w-md rounded-2xl border border-white/50 bg-white/85 p-6 shadow-xl backdrop-blur-sm md:p-8">
 
           <h2 className="text-center text-2xl font-semibold mb-8">
             Login
