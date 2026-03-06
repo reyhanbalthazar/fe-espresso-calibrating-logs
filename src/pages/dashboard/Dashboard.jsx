@@ -77,7 +77,7 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
 
         {/* HEADER */}
-        <Header title={`Espresso Calibrator`} />
+        <Header title={`KALYBRATE`} />
 
         <div className="py-6 sm:py-8">
           {/* METRIC CARDS */}

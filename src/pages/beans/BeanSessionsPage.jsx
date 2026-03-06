@@ -47,7 +47,7 @@ const BeanSessionsPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
-          <Header title="Espresso Calibrator" />
+          <Header title="KALYBRATE" />
 
           <div className="mt-10 bg-white rounded-2xl border border-gray-200 shadow-sm p-16 flex flex-col items-center justify-center">
             <div className="h-10 w-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
@@ -64,7 +64,7 @@ const BeanSessionsPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
-          <Header title="Espresso Calibrator" />
+          <Header title="KALYBRATE" />
 
           <div className="mt-10 bg-white rounded-2xl border border-red-200 shadow-sm p-10">
             <div className="flex items-start gap-4">
@@ -110,7 +110,7 @@ const BeanSessionsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <Header title="Espresso Calibrator" />
+        <Header title="KALYBRATE" />
 
         <div className="py-6 sm:py-8">
 

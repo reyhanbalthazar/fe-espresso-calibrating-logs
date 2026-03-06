@@ -119,7 +119,7 @@ const BeanListPage = () => {
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
 
         {/* KEEPING YOUR HEADER */}
-        <Header title="Espresso Calibrator" />
+        <Header title="KALYBRATE" />
 
         <div className="py-6 sm:py-8">
 

@@ -148,7 +148,7 @@ const SessionListPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100 overflow-x-hidden">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <Header title="Espresso Calibrator" />
+        <Header title="KALYBRATE" />
 
         <div className="py-6 sm:py-8">
           <div className="mb-6 sm:mb-8">
