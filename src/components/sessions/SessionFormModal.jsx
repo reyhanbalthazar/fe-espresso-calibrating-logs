@@ -93,8 +93,8 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl border border-gray-200 overflow-hidden max-h-[90vh] flex flex-col">
 
         {/* ===== Header ===== */}
         <div className="px-6 py-5 border-b border-gray-100">
@@ -107,8 +107,8 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
         </div>
 
         {/* ===== Body ===== */}
-        <form onSubmit={handleSubmit}>
-          <div className="px-6 py-6 space-y-6">
+        <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+          <div className="px-6 py-6 space-y-6 overflow-y-auto min-h-0">
 
             {isLoadingData ? (
               <div className="flex justify-center py-10">
@@ -136,7 +136,7 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
                       <option value="">Select bean</option>
                       {beans.map(bean => (
                         <option key={bean.id} value={bean.id}>
-                          {bean.name} — {bean.origin || 'Origin N/A'}
+                          {bean.name} - {bean.origin || 'Origin N/A'}
                         </option>
                       ))}
                     </select>
@@ -159,7 +159,7 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
                       <option value="">Select grinder</option>
                       {grinders.map(grinder => (
                         <option key={grinder.id} value={grinder.id}>
-                          {grinder.name} — {grinder.model || 'Model N/A'}
+                          {grinder.name} - {grinder.model || 'Model N/A'}
                         </option>
                       ))}
                     </select>
