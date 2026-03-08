@@ -305,8 +305,15 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
       );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto backdrop-blur-sm"
+      style={{ backgroundColor: 'rgba(75, 85, 99, 0.65)' }}
+      onClick={handleClose}
+    >
+      <div
+        className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
 
         {/* Header */}
         <div className="px-6 py-5 border-b bg-gradient-to-r from-gray-50 to-white">

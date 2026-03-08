@@ -176,15 +176,16 @@ const BeanFormModal = ({ isOpen, onClose, bean, onSubmit }) => {
   }));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={handleClose}
-      />
-
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto backdrop-blur-sm"
+      style={{ backgroundColor: 'rgba(75, 85, 99, 0.65)' }}
+      onClick={handleClose}
+    >
       {/* Modal */}
-      <div className="relative my-auto w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col">
+      <div
+        className="relative my-auto w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
 
         <form onSubmit={handleSubmit} className="flex flex-1 min-h-0 flex-col">
 

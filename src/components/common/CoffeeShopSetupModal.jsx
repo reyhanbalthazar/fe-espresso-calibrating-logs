@@ -41,7 +41,10 @@ const CoffeeShopSetupModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 px-4">
+    <div
+      className="fixed inset-0 z-[1000] flex items-center justify-center px-4 backdrop-blur-sm"
+      style={{ backgroundColor: 'rgba(75, 85, 99, 0.65)' }}
+    >
       <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-8">
         <h2 className="text-2xl font-semibold text-gray-900">Setup Your Coffee Shop</h2>
         <p className="mt-2 text-sm text-gray-600">

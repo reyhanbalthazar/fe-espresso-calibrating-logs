@@ -93,8 +93,15 @@ const SessionFormModal = ({ isOpen, onClose, session, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl border border-gray-200 overflow-hidden max-h-[90vh] flex flex-col">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 py-4 backdrop-blur-sm overflow-y-auto"
+      style={{ backgroundColor: 'rgba(75, 85, 99, 0.65)' }}
+      onClick={handleClose}
+    >
+      <div
+        className="bg-white w-full max-w-xl rounded-2xl shadow-xl border border-gray-200 overflow-hidden max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
 
         {/* ===== Header ===== */}
         <div className="px-6 py-5 border-b border-gray-100">

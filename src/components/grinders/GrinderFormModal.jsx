@@ -74,15 +74,16 @@ const GrinderFormModal = ({ isOpen, onClose, grinder, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={handleClose}
-      />
-
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 py-4 backdrop-blur-sm overflow-y-auto"
+      style={{ backgroundColor: 'rgba(75, 85, 99, 0.65)' }}
+      onClick={handleClose}
+    >
       {/* Modal Container */}
-      <div className="relative w-full max-w-xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div
+        className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
 
         <form onSubmit={handleSubmit}>
 
