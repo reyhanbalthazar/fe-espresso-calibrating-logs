@@ -138,11 +138,33 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
     }
 
     try {
+      const normalizedFlavorNoteIds = [...new Set((formData.flavor_note_ids || [])
+        .map((id) => Number(id))
+        .filter((id) => Number.isInteger(id)))];
+
+      const allFlavorNotes = flavorWheel.flatMap((category) =>
+        (category.subcategories || []).flatMap((subcategory) =>
+          (subcategory.notes || []).map((note) => ({
+            id: Number(note.id),
+            name: note.name,
+          }))
+        )
+      );
+
+      const selectedFlavorNames = allFlavorNotes
+        .filter((note) => normalizedFlavorNoteIds.includes(note.id))
+        .map((note) => note.name)
+        .filter(Boolean);
+
+      const combinedTasteNotes = [
+        selectedFlavorNames.length > 0 ? `Flavor notes: ${selectedFlavorNames.join(', ')}` : '',
+        (formData.taste_notes || '').trim()
+      ].filter(Boolean).join('\n');
+
       const payload = {
         ...formData,
-        flavor_note_ids: [...new Set((formData.flavor_note_ids || [])
-          .map((id) => Number(id))
-          .filter((id) => Number.isInteger(id)))]
+        flavor_note_ids: normalizedFlavorNoteIds,
+        taste_notes: shot ? formData.taste_notes : combinedTasteNotes
       };
 
       await onSubmit(payload);
