@@ -3,7 +3,7 @@ import ShotCard from '../shots/ShotCard';
 import ShotFormModal from '../shots/ShotFormModal';
 import { shotAPI } from '../../services/api';
 
-const ShotList = ({ sessionId, sessionDate }) => {
+const ShotList = ({ sessionId }) => {
   const [shots, setShots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,12 +38,12 @@ const ShotList = ({ sessionId, sessionDate }) => {
     setShowFormModal(true);
   };
 
-  const handleDeleteShot = async (shotId) => {
+  const handleDeleteShot = async (shotNumber) => {
     if (!window.confirm('Delete this shot?')) return;
 
     try {
-      await shotAPI.deleteShot(sessionId, shotId);
-      setShots(prev => prev.filter(shot => shot.id !== shotId));
+      await shotAPI.deleteShot(sessionId, shotNumber);
+      setShots(prev => prev.filter(shot => shot.shot_number !== shotNumber));
     } catch (err) {
       setError(err.message || 'Failed to delete shot');
     }
@@ -59,12 +59,12 @@ const ShotList = ({ sessionId, sessionDate }) => {
       }
 
       if (editingShot) {
-        const response = await shotAPI.updateShot(sessionId, editingShot.id, shotData);
+        const response = await shotAPI.updateShot(sessionId, editingShot.shot_number, shotData);
         const updatedShot = response.data.data || response.data;
 
         setShots(prev =>
           prev.map(shot =>
-            shot.id === editingShot.id ? { ...updatedShot, id: editingShot.id } : shot
+            shot.shot_number === editingShot.shot_number ? { ...shot, ...updatedShot } : shot
           )
         );
       } else {

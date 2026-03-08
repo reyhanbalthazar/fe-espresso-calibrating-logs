@@ -34,7 +34,7 @@ const ShotCard = ({ shot, onEdit, onDelete }) => {
           </button>
 
           <button
-            onClick={() => onDelete(shot.id)}
+            onClick={() => onDelete(shot.shot_number)}
             className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition"
             aria-label="Delete shot"
           >

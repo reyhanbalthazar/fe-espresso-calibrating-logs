@@ -9,6 +9,7 @@ export const ShotSchema = {
   time_seconds: null,
   water_temperature: null, // New field
   taste_notes: '',
+  flavor_note_ids: [],
   action_taken: '',
   created_at: null,
   updated_at: null

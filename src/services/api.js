@@ -100,6 +100,10 @@ export const shotAPI = {
   deleteShot: (sessionId, shotId) => api.delete(`/calibration-sessions/${sessionId}/shots/${shotId}`),
 };
 
+export const flavorWheelAPI = {
+  getFlavorWheel: () => api.get('/flavor-wheel'),
+};
+
 export const dashboardAPI = {
   // Get comprehensive dashboard data
   getDashboardData: async () => {

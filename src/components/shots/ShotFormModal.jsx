@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShotSchema, validateShotData } from '../../types/shot';
+import { flavorWheelAPI } from '../../services/api';
 
 const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingShots }) => {
   const [formData, setFormData] = useState({ ...ShotSchema });
@@ -8,25 +9,58 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
   const [aiSuggestion, setAiSuggestion] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
+  const [flavorWheel, setFlavorWheel] = useState([]);
+  const [flavorLoading, setFlavorLoading] = useState(false);
+  const [flavorError, setFlavorError] = useState('');
+  const [flavorSearch, setFlavorSearch] = useState('');
 
   useEffect(() => {
     if (isOpen && shot) {
+      const selectedFlavorIds = Array.isArray(shot.flavor_note_ids)
+        ? shot.flavor_note_ids.map((id) => Number(id)).filter((id) => Number.isInteger(id))
+        : Array.isArray(shot.flavor_notes)
+          ? shot.flavor_notes.map((note) => Number(note.id)).filter((id) => Number.isInteger(id))
+          : [];
+
       setFormData({
         ...ShotSchema,
-        ...shot
+        ...shot,
+        flavor_note_ids: selectedFlavorIds
       });
     } else if (isOpen) {
       const nextShotNumber = getNextAvailableShotNumber(existingShots || []);
       setFormData({
         ...ShotSchema,
         calibration_session_id: sessionId,
-        shot_number: nextShotNumber
+        shot_number: nextShotNumber,
+        flavor_note_ids: []
       });
     }
     setErrors({});
     setAiSuggestion('');
     setAiError('');
   }, [isOpen, shot, sessionId, existingShots]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const fetchFlavorWheel = async () => {
+      try {
+        setFlavorLoading(true);
+        setFlavorError('');
+        const response = await flavorWheelAPI.getFlavorWheel();
+        const payload = response?.data?.data || [];
+        setFlavorWheel(Array.isArray(payload) ? payload : []);
+      } catch (error) {
+        setFlavorError(error?.response?.data?.message || error?.message || 'Failed to load flavor wheel.');
+        setFlavorWheel([]);
+      } finally {
+        setFlavorLoading(false);
+      }
+    };
+
+    fetchFlavorWheel();
+  }, [isOpen]);
 
   const getNextAvailableShotNumber = (existingShots) => {
     if (!existingShots?.length) return 1;
@@ -53,6 +87,26 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+  };
+
+  const toggleFlavorNote = (noteId) => {
+    const numericId = Number(noteId);
+    if (!Number.isInteger(numericId)) return;
+
+    setFormData((prev) => {
+      const current = Array.isArray(prev.flavor_note_ids) ? prev.flavor_note_ids : [];
+      const exists = current.includes(numericId);
+      return {
+        ...prev,
+        flavor_note_ids: exists
+          ? current.filter((id) => id !== numericId)
+          : [...current, numericId]
+      };
+    });
+  };
+
+  const clearAllFlavorNotes = () => {
+    setFormData((prev) => ({ ...prev, flavor_note_ids: [] }));
   };
 
   const handleSubmit = async (e) => {
@@ -84,7 +138,14 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
     }
 
     try {
-      await onSubmit(formData);
+      const payload = {
+        ...formData,
+        flavor_note_ids: [...new Set((formData.flavor_note_ids || [])
+          .map((id) => Number(id))
+          .filter((id) => Number.isInteger(id)))]
+      };
+
+      await onSubmit(payload);
       onClose();
     } catch (error) {
       setErrors({ submit: error.message || 'Failed to save shot.' });
@@ -97,13 +158,16 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
     setErrors({});
     setAiSuggestion('');
     setAiError('');
+    setFlavorSearch('');
     onClose();
   };
 
   const handleGenerateAiSuggestion = async () => {
-    const promptInput = (formData.taste_notes || '').trim();
-    if (!promptInput) {
-      setAiError('Please fill Taste Notes first.');
+    const selectedFlavors = selectedFlavorNotes.map((note) => note.name).filter(Boolean);
+    const additionalNotes = (formData.taste_notes || '').trim();
+
+    if (selectedFlavors.length === 0) {
+      setAiError('Please select Flavor Notes first.');
       setAiSuggestion('');
       return;
     }
@@ -120,7 +184,8 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
 
     try {
       const prompt = `You are a barista coach. Based on this shot data:
-          - Taste notes: ${promptInput}
+          - Flavor notes (selected): ${selectedFlavors.join(', ')}
+          - Additional taste notes: ${additionalNotes || '-'}
           - Dose: ${formData.dose || '-'} g
           - Yield: ${formData.yield || '-'} g
           - Time: ${formData.time_seconds || '-'} s
@@ -156,6 +221,66 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
   };
 
   if (!isOpen) return null;
+
+  const allNotes = flavorWheel.flatMap((category) =>
+    (category.subcategories || []).flatMap((subcategory) =>
+      (subcategory.notes || []).map((note) => ({
+        id: note.id,
+        name: note.name,
+        categoryName: category.name,
+        subcategoryName: subcategory.name,
+      }))
+    )
+  );
+
+  const selectedFlavorIds = Array.isArray(formData.flavor_note_ids) ? formData.flavor_note_ids : [];
+  const selectedFlavorNotes = allNotes.filter((note) => selectedFlavorIds.includes(note.id));
+  const isFlavorSelected = (id) => selectedFlavorIds.includes(Number(id));
+
+  const searchTerm = flavorSearch.trim().toLowerCase();
+  const filteredWheel = !searchTerm
+    ? flavorWheel
+    : flavorWheel
+      .map((category) => {
+        const categoryMatches = category.name.toLowerCase().includes(searchTerm);
+        const categoryOverallMatches = (category.overall_note?.name || '').toLowerCase().includes(searchTerm);
+        const subcategories = (category.subcategories || [])
+          .map((subcategory) => {
+            const subcategoryMatches = subcategory.name.toLowerCase().includes(searchTerm);
+            const subcategoryOverallMatches = (subcategory.overall_note?.name || '').toLowerCase().includes(searchTerm);
+            const notes = (subcategory.notes || []).filter((note) => {
+              return (
+                categoryMatches ||
+                categoryOverallMatches ||
+                subcategoryMatches ||
+                subcategoryOverallMatches ||
+                note.name.toLowerCase().includes(searchTerm)
+              );
+            });
+
+            if (subcategoryMatches && notes.length === 0) {
+              return { ...subcategory, notes: subcategory.notes || [] };
+            }
+
+            return { ...subcategory, notes };
+          })
+          .filter((subcategory) => {
+            return (
+              categoryMatches ||
+              categoryOverallMatches ||
+              subcategory.name.toLowerCase().includes(searchTerm) ||
+              (subcategory.overall_note?.name || '').toLowerCase().includes(searchTerm) ||
+              (subcategory.notes || []).length > 0
+            );
+          });
+
+        return { ...category, subcategories };
+      })
+      .filter((category) =>
+        category.subcategories.length > 0 ||
+        category.name.toLowerCase().includes(searchTerm) ||
+        (category.overall_note?.name || '').toLowerCase().includes(searchTerm)
+      );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
@@ -279,15 +404,142 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
               </h3>
               <div className="space-y-6">
                 <div>
-                  <label className="form-label">Taste Notes</label>
-                  <textarea
-                    name="taste_notes"
-                    rows="3"
-                    value={formData.taste_notes || ''}
-                    onChange={handleChange}
-                    className="form-input resize-none"
-                    placeholder="Flavor balance, acidity, body, defects..."
+                  <div className="flex items-center justify-between gap-3">
+                    <label className="form-label !mb-0">Flavor Notes (Flavor Wheel)</label>
+                    {selectedFlavorIds.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={clearAllFlavorNotes}
+                        className="text-xs font-medium text-red-600 hover:text-red-700"
+                      >
+                        Clear all
+                      </button>
+                    )}
+                  </div>
+                  <p className="helper-text mb-2">Choose one or more flavor notes for consistent tagging.</p>
+                  <input
+                    type="text"
+                    value={flavorSearch}
+                    onChange={(e) => setFlavorSearch(e.target.value)}
+                    className="form-input"
+                    placeholder="Search notes, subcategories, or categories..."
                   />
+
+                  {selectedFlavorNotes.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {selectedFlavorNotes.map((note) => (
+                        <button
+                          key={note.id}
+                          type="button"
+                          onClick={() => toggleFlavorNote(note.id)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs bg-indigo-100 text-indigo-800 border border-indigo-200 hover:bg-indigo-200"
+                        >
+                          <span>{note.name}</span>
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mt-3 border border-gray-200 rounded-xl p-3 max-h-64 overflow-y-auto bg-gray-50">
+                    {flavorLoading && (
+                      <p className="text-sm text-gray-500">Loading flavor wheel...</p>
+                    )}
+
+                    {!flavorLoading && flavorError && (
+                      <div className="text-sm text-red-600">
+                        {flavorError}
+                      </div>
+                    )}
+
+                    {!flavorLoading && !flavorError && filteredWheel.length === 0 && (
+                      <p className="text-sm text-gray-500">No flavor note found.</p>
+                    )}
+
+                    {!flavorLoading && !flavorError && filteredWheel.length > 0 && (
+                      <div className="space-y-3">
+                        {filteredWheel.map((category) => (
+                          <div key={category.id} className="rounded-lg border border-gray-200 bg-white p-3">
+                            <div className="flex items-center justify-between gap-2">
+                              <h4 className="text-sm font-semibold text-gray-900">{category.name}</h4>
+                              {category.overall_note && (
+                                <button
+                                  type="button"
+                                  onClick={() => toggleFlavorNote(category.overall_note.id)}
+                                  className={`px-2 py-1 rounded-full text-[11px] border transition ${isFlavorSelected(category.overall_note.id)
+                                    ? 'bg-emerald-600 text-white border-emerald-600'
+                                    : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                                    }`}
+                                >
+                                  Basic: {category.name}
+                                </button>
+                              )}
+                            </div>
+                            <div className="mt-2 space-y-2">
+                              {(category.subcategories || []).map((subcategory) => (
+                                <div key={subcategory.id}>
+                                  <div className="flex items-center justify-between gap-2">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                      {subcategory.name}
+                                    </p>
+                                    {subcategory.overall_note && (
+                                      <button
+                                        type="button"
+                                        onClick={() => toggleFlavorNote(subcategory.overall_note.id)}
+                                        className={`px-2 py-1 rounded-full text-[11px] border transition ${isFlavorSelected(subcategory.overall_note.id)
+                                          ? 'bg-sky-600 text-white border-sky-600'
+                                          : 'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100'
+                                          }`}
+                                      >
+                                        Basic: {subcategory.name}
+                                      </button>
+                                    )}
+                                  </div>
+                                  {(subcategory.notes || []).filter((note) => !note.is_overall).length === 0 ? (
+                                    <p className="text-xs text-gray-400 mt-1">No selectable notes.</p>
+                                  ) : (
+                                    <div className="mt-1 flex flex-wrap gap-2">
+                                      {subcategory.notes
+                                        .filter((note) => !note.is_overall)
+                                        .map((note) => {
+                                        const checked = isFlavorSelected(note.id);
+                                        return (
+                                          <button
+                                            key={note.id}
+                                            type="button"
+                                            onClick={() => toggleFlavorNote(note.id)}
+                                            className={`px-2.5 py-1 rounded-full text-xs border transition ${checked
+                                              ? 'bg-indigo-600 text-white border-indigo-600'
+                                              : 'bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:text-indigo-700'
+                                              }`}
+                                          >
+                                            {note.name}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-4">
+                    <label className="form-label">Additional Taste Notes</label>
+                    <textarea
+                      name="taste_notes"
+                      rows="3"
+                      value={formData.taste_notes || ''}
+                      onChange={handleChange}
+                      className="form-input resize-none"
+                      placeholder="Optional free-text notes (balance, body, defects, etc.)"
+                    />
+                  </div>
+
                   <div className="mt-3">
                     <button
                       type="button"
@@ -298,7 +550,7 @@ const ShotFormModal = ({ isOpen, onClose, shot, sessionId, onSubmit, existingSho
                       {aiLoading ? 'Thinking...' : 'Get AI Suggestion'}
                     </button>
                     <p className="mt-2 text-xs text-gray-500">
-                      Generate suggestion from Taste Notes before filling Action Taken.
+                      Select Flavor Notes first. Additional Taste Notes are optional context.
                     </p>
                   </div>
                   {aiError && (
