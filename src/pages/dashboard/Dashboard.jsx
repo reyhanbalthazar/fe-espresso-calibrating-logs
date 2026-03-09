@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 import { dashboardAPI } from '../../services/api';
 import Header from '../../components/common/Header';
 
@@ -12,16 +25,13 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-
-        // Fetch comprehensive dashboard data
         const data = await dashboardAPI.getDashboardData();
         setDashboardData(data);
-
-        setLoading(false);
       } catch (err) {
         setError('Failed to fetch dashboard data');
-        setLoading(false);
         console.error('Error fetching dashboard data:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -30,13 +40,13 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="min-h-screen bg-slate-50">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <Header title="Loading Dashboard..." />
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600 text-base sm:text-lg">Loading dashboard data...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto" />
+              <p className="mt-4 text-slate-600 text-base sm:text-lg">Loading dashboard data...</p>
             </div>
           </div>
         </div>
@@ -46,224 +56,234 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <div className="min-h-screen bg-slate-50">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <Header title="Dashboard Error" />
           <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <p className="text-red-600 text-lg">{error}</p>
-            </div>
+            <p className="text-red-600 text-lg">{error}</p>
           </div>
         </div>
       </div>
     );
   }
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+  const COLORS = ['#2563EB', '#059669', '#D97706', '#DC2626', '#7C3AED', '#0EA5E9', '#16A34A'];
 
-  // Prepare extraction trends data for chart from shot performance data
-  const extractionTrendsData = Array.isArray(dashboardData?.shot_performance?.last_session_shots) ?
-    dashboardData.shot_performance.last_session_shots : [];
+  const summary = dashboardData?.summary || {};
+  const performance = dashboardData?.performance || {};
+  const trend = dashboardData?.activity_trend || {};
+  const tasteProfile = dashboardData?.taste_profile || {};
 
-  // Create extractionByBean from bean_stats if available, otherwise use empty array
-  const extractionByBean = Array.isArray(dashboardData?.bean_stats) ?
-    dashboardData.bean_stats.map(bean => ({
-      bean_name: bean.bean_name,
-      session_count: bean.session_count
-    })) : [];
+  const recentSessions = Array.isArray(dashboardData?.recent_sessions) ? dashboardData.recent_sessions : [];
+  const beanStats = Array.isArray(dashboardData?.bean_stats) ? dashboardData.bean_stats : [];
+  const grinderStats = Array.isArray(dashboardData?.grinder_stats) ? dashboardData.grinder_stats : [];
+  const contributors = Array.isArray(dashboardData?.contributors) ? dashboardData.contributors : [];
+
+  const activityChartData = Array.isArray(trend.labels)
+    ? trend.labels.map((label, index) => ({
+      month: label,
+      sessions: trend.sessions?.[index] || 0,
+      shots: trend.shots?.[index] || 0,
+    }))
+    : [];
+
+  const flavorCategoryData = Object.entries(tasteProfile.flavor_categories || {})
+    .map(([name, value]) => ({ name, value }))
+    .slice(0, 7);
+
+  const topNotes = Array.isArray(tasteProfile.top_notes)
+    ? tasteProfile.top_notes
+    : Object.entries(tasteProfile.flavor_notes || {})
+      .map(([name, count]) => ({ name, count }))
+      .slice(0, 10);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+    <div className="min-h-screen bg-slate-50">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        <Header title="KALYBRATE" />
 
-        {/* HEADER */}
-        <Header title={`KALYBRATE`} />
-
-        <div className="py-6 sm:py-8">
-          {/* METRIC CARDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          {[
-            { label: 'Beans', value: dashboardData?.counts?.beans || 0 },
-            { label: 'Grinders', value: dashboardData?.counts?.grinders || 0 },
-            { label: 'Sessions', value: dashboardData?.counts?.sessions || 0 },
-            { label: 'Shots', value: dashboardData?.counts?.shots || 0 },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
-            >
-              <p className="text-sm text-gray-500">{item.label}</p>
-              <p className="text-3xl font-semibold text-indigo-600 mt-2">
-                {item.value}
-              </p>
-            </div>
-          ))}
+        <div className="mt-4 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-700 p-6 text-white">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Coffee Shop Dashboard</p>
+          <h2 className="mt-2 text-2xl font-semibold">{dashboardData?.coffee_shop?.name || 'Unknown Coffee Shop'}</h2>
+          <p className="mt-2 text-sm text-slate-300">
+            Last session: {summary.last_session_date || '-'} | Generated: {dashboardData?.generated_at || '-'}
+          </p>
         </div>
 
-          {/* CHART GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-          {/* Monthly Activity */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-6">
-              Monthly Session Activity
-            </h3>
-
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={
-                    dashboardData?.monthly_activity?.labels &&
-                      dashboardData.monthly_activity.sessions
-                      ? dashboardData.monthly_activity.labels.map(
-                        (label, index) => ({
-                          month: label,
-                          sessions:
-                            dashboardData.monthly_activity.sessions[index] || 0,
-                        })
-                      )
-                      : []
-                  }
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar
-                    dataKey="sessions"
-                    fill="#6366F1"
-                    radius={[8, 8, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Grinder Usage */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-6">
-              Grinder Usage
-            </h3>
-
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={
-                    Array.isArray(dashboardData?.grinder_stats)
-                      ? dashboardData.grinder_stats
-                      : []
-                  }
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="grinder_name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar
-                    dataKey="usage_count"
-                    fill="#8B5CF6"
-                    radius={[8, 8, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          </div>
-
-          {/* SHOT PERFORMANCE CARDS */}
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
-          {dashboardData?.shot_performance?.averages ? (
-            [
-              {
-                label: 'Avg. Dose',
-                value: `${dashboardData.shot_performance.averages.dose?.toFixed(
-                  2
-                ) || 0} g`,
-              },
-              {
-                label: 'Avg. Yield',
-                value: `${dashboardData.shot_performance.averages.yield?.toFixed(
-                  2
-                ) || 0} g`,
-              },
-              {
-                label: 'Avg. Time',
-                value: `${dashboardData.shot_performance.averages.time?.toFixed(
-                  2
-                ) || 0} sec`,
-              },
-              {
-                label: 'Avg. Temp',
-                value: `${dashboardData.shot_performance.averages.temperature?.toFixed(
-                  0
-                ) || 0}°C`,
-              },
-            ].map((metric, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
-              >
-                <p className="text-sm text-gray-500">{metric.label}</p>
-                <p className="text-xl font-semibold text-gray-900 mt-2">
-                  {metric.value}
-                </p>
+        <div className="py-6 sm:py-8 space-y-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { label: 'Users', value: summary.total_users ?? 0 },
+              { label: 'Beans', value: summary.total_beans ?? 0 },
+              { label: 'Grinders', value: summary.total_grinders ?? 0 },
+              { label: 'Sessions', value: summary.total_sessions ?? 0 },
+              { label: 'Shots', value: summary.total_shots ?? 0 },
+              { label: 'Active Days (30d)', value: summary.active_days_30d ?? 0 },
+            ].map((item) => (
+              <div key={item.label} className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                <p className="text-xs text-slate-500 uppercase">{item.label}</p>
+                <p className="text-2xl font-semibold text-slate-900 mt-2">{item.value}</p>
               </div>
-            ))
-          ) : (
-            <div className="col-span-4 text-center text-gray-500">
-              No shot performance data available
-            </div>
-          )}
+            ))}
           </div>
 
-          {/* RECENT SESSIONS TABLE */}
-          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Recent Calibration Sessions
-              </h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+              <h3 className="text-lg font-semibold text-slate-800 mb-6">Activity Trend (6 Months)</h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={activityChartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="sessions" stroke="#2563EB" strokeWidth={2} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="shots" stroke="#059669" strokeWidth={2} dot={{ r: 3 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+              <h3 className="text-lg font-semibold text-slate-800 mb-6">Top Flavor Categories</h3>
+              <div className="h-80">
+                {flavorCategoryData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={flavorCategoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={110}>
+                        {flavorCategoryData.map((entry, index) => (
+                          <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center text-slate-500">No flavor data available</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {[
+              { label: 'Avg Dose', value: `${performance?.averages?.dose ?? 0} g` },
+              { label: 'Avg Yield', value: `${performance?.averages?.yield ?? 0} g` },
+              { label: 'Avg Time', value: `${performance?.averages?.time_seconds ?? 0} s` },
+              { label: 'Avg Temp', value: `${performance?.averages?.water_temperature ?? 0} degC` },
+              { label: 'Avg Brew Ratio', value: performance?.averages?.brew_ratio ?? 0 },
+            ].map((metric) => (
+              <div key={metric.label} className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                <p className="text-xs uppercase text-slate-500">{metric.label}</p>
+                <p className="mt-2 text-xl font-semibold text-slate-900">{metric.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+              <h3 className="text-lg font-semibold text-slate-800 mb-6">Top Beans by Session</h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={beanStats}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="bean_name" interval={0} angle={-25} textAnchor="end" height={70} />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="session_count" fill="#2563EB" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+              <h3 className="text-lg font-semibold text-slate-800 mb-6">Top Grinders by Usage</h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={grinderStats}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="grinder_name" interval={0} angle={-25} textAnchor="end" height={70} />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="usage_count" fill="#059669" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 overflow-x-auto">
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Contributors</h3>
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-xs">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Name</th>
+                    <th className="px-4 py-3 text-left">Sessions</th>
+                    <th className="px-6 py-3 text-left">Shots</th>
+                    <th className="px-6 py-3 text-left">Last Session</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {contributors.length > 0 ? contributors.map((item) => (
+                    <tr key={item.user_id} className="hover:bg-slate-50 transition">
+                      <td className="px-4 py-4 font-medium text-slate-900">{item.name}</td>
+                      <td className="px-4 py-4">{item.sessions}</td>
+                      <td className="px-6 py-4">{item.shots}</td>
+                      <td className="px-6 py-4">{item.last_session_date || '-'}</td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan="4" className="px-6 py-6 text-center text-slate-500">No contributor data</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+              <h3 className="text-lg font-semibold text-slate-800 mb-6">Top Flavor Notes</h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={topNotes}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" interval={0} angle={-25} textAnchor="end" height={80} />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#D97706" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-200">
+              <h3 className="text-lg font-semibold text-slate-800">Recent Calibration Sessions</h3>
+            </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-xs">
                   <tr>
                     <th className="px-6 py-3 text-left">Date</th>
+                    <th className="px-6 py-3 text-left">Barista</th>
                     <th className="px-6 py-3 text-left">Bean</th>
                     <th className="px-6 py-3 text-left">Grinder</th>
                     <th className="px-6 py-3 text-left">Shots</th>
                   </tr>
                 </thead>
-
-                <tbody className="divide-y divide-gray-200">
-                  {Array.isArray(dashboardData?.recent_sessions) &&
-                    dashboardData.recent_sessions.length > 0 ? (
-                    dashboardData.recent_sessions.slice(0, 10).map((session, i) => (
-                      <tr key={i} className="hover:bg-gray-50 transition">
-                        <td className="px-6 py-4">
-                          {session.date
-                            ? new Date(session.date).toLocaleDateString()
-                            : 'N/A'}
-                        </td>
-                        <td className="px-6 py-4 font-medium text-gray-900">
-                          {session.bean_name}
-                        </td>
-                        <td className="px-6 py-4">
-                          {session.grinder_name}
-                        </td>
-                        <td className="px-6 py-4">
-                          {session.shots_count}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
+                <tbody className="divide-y divide-slate-200">
+                  {recentSessions.length > 0 ? recentSessions.map((session) => (
+                    <tr key={session.id} className="hover:bg-slate-50 transition">
+                      <td className="px-6 py-4">{session.session_date || '-'}</td>
+                      <td className="px-6 py-4">{session.user?.name || '-'}</td>
+                      <td className="px-6 py-4 font-medium text-slate-900">{session.bean?.name || '-'}</td>
+                      <td className="px-6 py-4">{session.grinder?.name || '-'}</td>
+                      <td className="px-6 py-4">{session.shots_count ?? 0}</td>
+                    </tr>
+                  )) : (
                     <tr>
-                      <td
-                        colSpan="4"
-                        className="px-6 py-6 text-center text-gray-500"
-                      >
-                        No recent sessions
-                      </td>
+                      <td colSpan="5" className="px-6 py-6 text-center text-slate-500">No recent sessions</td>
                     </tr>
                   )}
                 </tbody>
@@ -274,6 +294,6 @@ const Dashboard = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Dashboard;
